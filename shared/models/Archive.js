@@ -1,5 +1,4 @@
 class Archive {
-
     constructor(id, customerFirstName, customerLastName, roomNumber, checkInDate, checkOutDate, bookingDate) {
         this.id = id;
         this.customerFirstName = customerFirstName;
@@ -10,55 +9,61 @@ class Archive {
         this.bookingDate = bookingDate;
     }
 
-    get id() {
-        return this._id;
+    getId() {
+        return this.id;
     }
 
-    set id(value) {
-        this._id = value;
+    setId(id) {
+        this.id = id;
     }
 
-    get customerName() {
-        return `${this.customerFirstName} ${this.customerLastName}`;
+    getCustomerFirstName() {
+        return this.customerFirstName;
     }
 
-    set customerFirstName(value) {
-        this._customerName = value;
+    setCustomerFirstName(customerFirstName) {
+        this.customerFirstName = customerFirstName;
     }
 
-    set customerLastName(value) {
-        this._customerLastName = value;
+    getCustomerLastName() {
+        return this.customerLastName;
     }
 
-    get roomNumber() {
-        return this._roomNumber;
+    setCustomerLastName(customerLastName) {
+        this.customerLastName = customerLastName;
     }
 
-    set roomNumber(value) {
-        this._roomNumber = value;
+    getRoomNumber() {
+        return this.roomNumber;
     }
 
-    get checkInDate() {
-        return this._checkInDate;
+    setRoomNumber(roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
-    set checkInDate(value) {
-        this._checkInDate = value;
+    getCheckInDate() {
+        return this.checkInDate;
     }
 
-    get checkOutDate() {
-        return this._checkOutDate;
+    setCheckInDate(checkInDate) {
+        this.checkInDate = checkInDate;
     }
 
-    set checkOutDate(value) {
-        this._checkOutDate = value;
+    getCheckOutDate() {
+        return this.checkOutDate;
     }
 
-    get bookingDate() {
-        return this._bookingDate;
+    setCheckOutDate(checkOutDate) {
+        this.checkOutDate = checkOutDate;
     }
 
-    set bookingDate(value) {
-        this._bookingDate = value;
+    getBookingDate() {
+        return this.bookingDate;
+    }
+
+    setBookingDate(bookingDate) {
+        this.bookingDate = bookingDate;
     }
 }
+
+module.exports = Archive;

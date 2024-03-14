@@ -1,64 +1,60 @@
 class Address {
-    constructor(id, street, apt, postalCode, city, state) {
+    constructor(id, street, apt, postalCode, city, province) {
         this.id = id;
         this.street = street;
         this.apt = apt;
         this.postalCode = postalCode;
         this.city = city;
-        this.state = state;
+        this.province = province;
     }
 
-    // Getter and Setter for 'id'
-    get id() {
-        return this._id;
+    getId() {
+        return this.id;
     }
 
-    set id(value) {
-        this._id = value;
+    setId(id) {
+        this.id = id;
     }
 
-    // Getter and Setter for 'street'
-    get street() {
-        return this._street;
+    getStreet() {
+        return this.street;
     }
 
-    set street(value) {
-        this._street = value;
+    setStreet(street) {
+        this.street = street;
     }
 
-    // Getter and Setter for 'apt'
-    get apt() {
-        return this._apt;
+    getApt() {
+        return this.apt;
     }
 
-    set apt(value) {
-        this._apt = value;
+    setApt(apt) {
+        this.apt = apt;
     }
 
-    // Getter and Setter for 'postalCode'
-    get postalCode() {
-        return this._postalCode;
+    getPostalCode() {
+        return this.postalCode;
     }
 
-    set postalCode(value) {
-        this._postalCode = value;
+    setPostalCode(postalCode) {
+        this.postalCode = postalCode;
     }
 
-    // Getter and Setter for 'city'
-    get city() {
-        return this._city;
+    getCity() {
+        return this.city;
     }
 
-    set city(value) {
-        this._city = value;
+    setCity(city) {
+        this.city = city;
     }
 
-    // Getter and Setter for 'state'
-    get state() {
-        return this._state;
+    getProvince() {
+        return this.province;
     }
 
-    set state(value) {
-        this._state = value;
+    setProvince(province) {
+        this.province = province;
     }
 }
+
+module.exports = Address;

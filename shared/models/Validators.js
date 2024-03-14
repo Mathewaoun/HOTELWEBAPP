@@ -74,3 +74,5 @@ class Validators {
     
     
 }
+
+module.exports = Validators;

@@ -1,60 +1,60 @@
 class Chain {
-    constructor(id, name, addressId, numLocations, email, phoneNumbers) {
-        this.id = id;
-        this.name = name;
-        this.addressId = addressId;
-        this.numLocations = numLocations;
-        this.email = email;
-        this.phoneNumbers = phoneNumbers;
-    }
+  constructor(id, name, addressId, numLocations, email, phoneNumbers) {
+      this.id = id;
+      this.name = name;
+      this.addressId = addressId;
+      this.numLocations = numLocations;
+      this.email = email;
+      this.phoneNumbers = phoneNumbers;
+  }
 
-    // Getters
-    get id() {
-      return this._id;
-    }
+  getId() {
+      return this.id;
+  }
 
-    get name() {
-      return this._name;
-    }
+  setId(id) {
+      this.id = id;
+  }
 
-    get addressId() {
-      return this._addressId;
-    }
+  getName() {
+      return this.name;
+  }
 
-    get numLocations() {
-      return this._numLocations;
-    }
+  setName(name) {
+      this.name = name;
+  }
 
-    get email() {
-      return this._email;
-    }
+  getAddressId() {
+      return this.addressId;
+  }
 
-    get phoneNumbers() {
-      return this._phoneNumbers;
-    }
+  setAddressId(addressId) {
+      this.addressId = addressId;
+  }
 
-    // Setters
-    set id(value) {
-      this._id = value;
-    }
+  getNumLocations() {
+      return this.numLocations;
+  }
 
-    set name(value) {
-      this._name = value;
-    }
+  setNumLocations(numLocations) {
+      this.numLocations = numLocations;
+  }
 
-    set addressId(value) {
-      this._addressId = value;
-    }
+  getEmail() {
+      return this.email;
+  }
 
-    set numLocations(value) {
-      this._numLocations = value;
-    }
+  setEmail(email) {
+      this.email = email;
+  }
 
-    set email(value) {
-      this._email = value;
-    }
+  getPhoneNumbers() {
+      return this.phoneNumbers;
+  }
 
-    set phoneNumbers(value) {
-      this._phoneNumbers = value;
-    }
+  setPhoneNumbers(phoneNumbers) {
+      this.phoneNumbers = phoneNumbers;
+  }
 }
+
+module.exports = Chain;

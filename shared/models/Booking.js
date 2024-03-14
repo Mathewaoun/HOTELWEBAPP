@@ -14,99 +14,101 @@ class Booking {
         this.paidOnline = paidOnline;
     }
 
-    get id() {
-        return this._id;
+    getId() {
+        return this.id;
     }
 
-    set id(value) {
-        this._id = value;
+    setId(id) {
+        this.id = id;
     }
 
-    get customerId() {
-        return this._customerId;
+    getCustomerId() {
+        return this.customerId;
     }
 
-    set customerId(value) {
-        this._customerId = value;
+    setCustomerId(customerId) {
+        this.customerId = customerId;
     }
 
-    get employeeId() {
-        return this._employeeId;
+    getEmployeeId() {
+        return this.employeeId;
     }
 
-    set employeeId(value) {
-        this._employeeId = value;
+    setEmployeeId(employeeId) {
+        this.employeeId = employeeId;
     }
 
-    get roomId() {
-        return this._roomId;
+    getRoomId() {
+        return this.roomId;
     }
 
-    set roomId(value) {
-        this._roomId = value;
+    setRoomId(roomId) {
+        this.roomId = roomId;
     }
 
-    get archiveId() {
-        return this._archiveId;
+    getArchiveId() {
+        return this.archiveId;
     }
 
-    set archiveId(value) {
-        this._archiveId = value;
+    setArchiveId(archiveId) {
+        this.archiveId = archiveId;
     }
 
-    get dateBooked() {
-        return this._dateBooked;
+    getDateBooked() {
+        return this.dateBooked;
     }
 
-    set dateBooked(value) {
-        this._dateBooked = value;
+    setDateBooked(dateBooked) {
+        this.dateBooked = dateBooked;
     }
 
-    get customerName() {
-        return this._customerName;
+    getCustomerName() {
+        return this.customerName;
     }
 
-    set customerName(value) {
-        this._customerName = value;
+    setCustomerName(customerName) {
+        this.customerName = customerName;
     }
 
-    get checkInDate() {
-        return this._checkInDate;
+    getCheckInDate() {
+        return this.checkInDate;
     }
 
-    set checkInDate(value) {
-        this._checkInDate = value;
+    setCheckInDate(checkInDate) {
+        this.checkInDate = checkInDate;
     }
 
-    get checkOutDate() {
-        return this._checkOutDate;
+    getCheckOutDate() {
+        return this.checkOutDate;
     }
 
-    set checkOutDate(value) {
-        this._checkOutDate = value;
+    setCheckOutDate(checkOutDate) {
+        this.checkOutDate = checkOutDate;
     }
 
-    get numPeople() {
-        return this._numPeople;
+    getNumPeople() {
+        return this.numPeople;
     }
 
-    set numPeople(value) {
-        this._numPeople = value;
+    setNumPeople(numPeople) {
+        this.numPeople = numPeople;
     }
 
-    get isRenting() {
-        return this._isRenting;
+    getIsRenting() {
+        return this.isRenting;
     }
 
-    set isRenting(value) {
-        this._isRenting = value;
+    setIsRenting(isRenting) {
+        this.isRenting = isRenting;
     }
 
-    get paidOnline() {
-        return this._paidOnline;
+    getPaidOnline() {
+        return this.paidOnline;
     }
 
-    set paidOnline(value) {
-        this._paidOnline = value;
+    setPaidOnline(paidOnline) {
+        this.paidOnline = paidOnline;
     }
 }
+
+module.exports = Booking;
