@@ -1,59 +1,78 @@
-
 class Employee {
-    constructor(id, hotelId, firstName, lastName, addressId, role) {
+    constructor(id, hotelId, firstName, lastName, username, password, addressId, role) {
         this.id = id;
         this.hotelId = hotelId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = username;
+        this.password = password;
         this.addressId = addressId;
         this.role = role;
     }
 
-    get id() {
+    getId() {
         return this.id;
     }
 
-    set id(value) {
-        this.id = value;
+    setId(id) {
+        this.id = id;
     }
 
-    get hotelId() {
+    getHotelId() {
         return this.hotelId;
     }
 
-    set hotelId(hotelId) {
+    setHotelId(hotelId) {
         this.hotelId = hotelId;
     }
 
-    get firstName() {
+    getFirstName() {
         return this.firstName;
     }
 
-    set firstName(firstName) {
+    setFirstName(firstName) {
         this.firstName = firstName;
     }
 
-    get lastName() {
+    getLastName() {
         return this.lastName;
     }
 
-    set lastName(lastName) {
+    setLastName(lastName) {
         this.lastName = lastName;
     }
 
-    get addressId() {
+    getUserName() {
+        return this.userName;
+    }
+
+    setUserName(userName) {
+        this.userName = userName;
+    }
+
+    getPassword() {
+        return this.password;
+    }
+
+    setPassword(password) {
+        this.password = password;
+    }
+
+    getAddressId() {
         return this.addressId;
     }
 
-    set addressId(addressId) {
+    setAddressId(addressId) {
         this.addressId = addressId;
     }
 
-    get role() {
+    getRole() {
         return this.role;
     }
 
-    set role(role) {
+    setRole(role) {
         this.role = role;
     }
-  }
+}
+
+module.exports = Employee;

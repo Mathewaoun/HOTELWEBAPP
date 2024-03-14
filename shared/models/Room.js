@@ -1,85 +1,87 @@
 class Room {
     constructor(id, hotelId, price, amenities, capacity, mountainView, seaView, extendable, issues) {
-        this.id = id;
-        this.hotelId = hotelId;
-        this.price = price;
-        this.amenities = amenities;
-        this.capacity = capacity;
-        this.mountainView = mountainView;
-        this.seaView = seaView;
-        this.extendable = extendable;
-        this.issues = issues;
+      this.id = id;
+      this.hotelId = hotelId;
+      this.price = price;
+      this.amenities = amenities;
+      this.capacity = capacity;
+      this.mountainView = mountainView;
+      this.seaView = seaView;
+      this.extendable = extendable;
+      this.issues = issues;
     }
-
-    get id() {
-        return this._id;
+  
+    getId() {
+      return this.id;
     }
-
-    set id(value) {
-        this._id = value;
+  
+    setId(id) {
+      this.id = id;
     }
-
-    get hotelId() {
-        return this._hotelId;
+  
+    getHotelId() {
+      return this.hotelId;
     }
-
-    set hotelId(value) {
-        this._hotelId = value;
+  
+    setHotelId(hotelId) {
+      this.hotelId = hotelId;
     }
-
-    get price() {
-        return this._price;
+  
+    getPrice() {
+      return this.price;
     }
-
-    set price(value) {
-        this._price = value;
+  
+    setPrice(price) {
+      this.price = price;
     }
-
-    get amenities() {
-        return this._amenities;
+  
+    getAmenities() {
+      return this.amenities;
     }
-
-    set amenities(value) {
-        this._amenities = value;
+  
+    setAmenities(amenities) {
+      this.amenities = amenities;
     }
-
-    get capacity() {
-        return this._capacity;
+  
+    getCapacity() {
+      return this.capacity;
     }
-
-    set capacity(value) {
-        this._capacity = value;
+  
+    setCapacity(capacity) {
+      this.capacity = capacity;
     }
-
-    get mountainView() {
-        return this._mountainView;
+  
+    getMountainView() {
+      return this.mountainView;
     }
-
-    set mountainView(value) {
-        this._mountainView = value;
+  
+    setMountainView(mountainView) {
+      this.mountainView = mountainView;
     }
-
-    get seaView() {
-        return this._seaView;
+  
+    getSeaView() {
+      return this.seaView;
     }
-
-    set seaView(value) {
-        this._seaView = value;
+  
+    setSeaView(seaView) {
+      this.seaView = seaView;
     }
-
-    get extendable() {
-        return this._extendable;
+  
+    getExtendable() {
+      return this.extendable;
     }
-
-    set extendable(value) {
-        this._extendable = value;
+  
+    setExtendable(extendable) {
+      this.extendable = extendable;
     }
-
-    get issues() {
-        return this._issues;
+  
+    getIssues() {
+      return this.issues;
     }
-
-    set issues(value) {
-        this._issues = value;
+  
+    setIssues(issues) {
+      this.issues = issues;
     }
-}
+  }
+  
+  module.exports = Room;

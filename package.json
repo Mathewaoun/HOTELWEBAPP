@@ -2,9 +2,9 @@
   "name": "HOTELWEBAPP",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "concurrently \"cd frontend && npm start\" \"cd server && npm start\"",
+    "start": "concurrently \"cd frontend && ng serve --port 3000\" \"cd server && node app.js\"",
     "build": "ng build --prod"
   },
   "keywords": [],

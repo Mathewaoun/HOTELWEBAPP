@@ -1,10 +1,11 @@
 class Customer {
-    constructor(id, identification, firstName, lastName, email, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId) {
+    constructor(id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId) {
         this.id = id;
         this.identification = identification;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.registrationDate = registrationDate;
         this.cardholderName = cardholderName;
         this.cardNumber = cardNumber;
@@ -14,99 +15,109 @@ class Customer {
         this.addressId = addressId;
     }
 
-    get id() {
-        return this._id;
+    getId() {
+        return this.id;
     }
 
-    set id(value) {
-        this._id = value;
+    setId(id) {
+        this.id = id;
     }
 
-    get identification() {
-        return this._identification;
+    getIdentification() {
+        return this.identification;
     }
 
-    set identification(value) {
-        this._identification = value;
+    setIdentification(identification) {
+        this.identification = identification;
     }
 
-    get firstName() {
-        return this._firstName;
+    getFirstName() {
+        return this.firstName;
     }
 
-    set firstName(value) {
-        this._firstName = value;
+    setFirstName(firstName) {
+        this.firstName = firstName;
     }
 
-    get lastName() {
-        return this._lastName;
+    getLastName() {
+        return this.lastName;
     }
 
-    set lastName(value) {
-        this._lastName = value;
+    setLastName(lastName) {
+        this.lastName = lastName;
     }
 
-    get email() {
-        return this._email;
+    getEmail() {
+        return this.email;
     }
 
-    set email(value) {
-        this._email = value;
+    setEmail(email) {
+        this.email = email;
     }
 
-    get registrationDate() {
-        return this._registrationDate;
+    getPassword() {
+        return this.password;
     }
 
-    set registrationDate(value) {
-        this._registrationDate = value;
+    setPassword(password) {
+        this.password = password;
     }
 
-    get cardholderName() {
-        return this._cardholderName;
+    getRegistrationDate() {
+        return this.registrationDate;
     }
 
-    set cardholderName(value) {
-        this._cardholderName = value;
+    setRegistrationDate(registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    get cardNumber() {
-        return this._cardNumber;
+    getCardholderName() {
+        return this.cardholderName;
     }
 
-    set cardNumber(value) {
-        this._cardNumber = value;
+    setCardholderName(cardholderName) {
+        this.cardholderName = cardholderName;
     }
 
-    get cvv() {
-        return this._cvv;
+    getCardNumber() {
+        return this.cardNumber;
     }
 
-    set cvv(value) {
-        this._cvv = value;
+    setCardNumber(cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    get cardExpiration() {
-        return this._cardExpiration;
+    getCvv() {
+        return this.cvv;
     }
 
-    set cardExpiration(value) {
-        this._cardExpiration = value;
+    setCvv(cvv) {
+        this.cvv = cvv;
     }
 
-    get billingAddressId() {
-        return this._billingAddressId;
+    getCardExpiration() {
+        return this.cardExpiration;
     }
 
-    set billingAddressId(value) {
-        this._billingAddressId = value;
+    setCardExpiration(cardExpiration) {
+        this.cardExpiration = cardExpiration;
     }
 
-    get addressId() {
-        return this._addressId;
+    getBillingAddressId() {
+        return this.billingAddressId;
     }
 
-    set addressId(value) {
-        this._addressId = value;
+    setBillingAddressId(billingAddressId) {
+        this.billingAddressId = billingAddressId;
+    }
+
+    getAddressId() {
+        return this.addressId;
+    }
+
+    setAddressId(addressId) {
+        this.addressId = addressId;
     }
 }
+
+module.exports = Customer;
