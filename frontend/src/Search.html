@@ -13,8 +13,54 @@
         <li class="nav-item"><a href="Hotelwebsite.html">Home</a></li>
         <li class="nav-item"><a href="Search.html">Book</a></li>
         <li class="nav-item"><a href="Contactus.html">Contact Us</a></li>
+        <li class="nav-item"><a href="Login.html"">Employee Only</a></li>
       </ul>
     </nav>
+    <div class="search-menu">
+        <input type="text" placeholder="Where?" class="search-input" />
+        <input type="date" id="checkin" name="checkin" required>
+        <input type="date" id="checkout" name="checkout" required>
+        <div class="guests-dropdown">
+            <select class="search-input" id="room-capacity">
+                <option value="0">Capacity?</option>
+                <option value="1">1 Adult</option>
+                <option value="2">2 Adults</option>
+                <option value="3">3 Adults</option>
+                <option value="4">4 Adults</option>
+                <option value="5">5 Adults</option>
+                <option value="6">6 Adults</option>
+            </select>
+        </div>
+        <div class="guests-dropdown">
+          <select class="search-input" id="hotel-chain">
+              <option value="0">Hotel Chain?</option>
+              <option value="1">Hotel Chain 1</option>
+              <option value="2">Hotel Chain 2</option>
+              <option value="3">Hotel Chain 3</option>
+              <option value="4">Hotel Chain 4</option>
+              <option value="5">Hotel Chain 5</option>
+              <option value="6">Hotel Chain 6</option>
+          </select>
+      </div>
+
+      <div class="star-rating">
+        <input type="radio" id="5-stars" name="rating" value="5" required>
+        <label for="5-stars" class="star">&#9733;</label>
+
+        <input type="radio" id="4-stars" name="rating" value="4">
+        <label for="4-stars" class="star">&#9733;</label>
+
+        <input type="radio" id="3-stars" name="rating" value="3">
+        <label for="3-stars" class="star">&#9733;</label>
+
+        <input type="radio" id="2-stars" name="rating" value="2">
+        <label for="2-stars" class="star">&#9733;</label>
+
+        <input type="radio" id="1-star" name="rating" value="1">
+        <label for="1-star" class="star">&#9733;</label>
+      </div>
+      <button id="search-btn" type="button" class="search-btn">Search</button>
+    </div>
 
     <main class="main-content">
       <section class="hotel-selection">
@@ -33,7 +79,7 @@
         </div>
 
         <div class="hotel-option">
-          <img src="Images/hilton.jpeg".jpg" alt="Hotel Name" class="hotel-image">
+          <img src="Images/hilton.jpeg" alt="Hotel Name" class="hotel-image">
           <div class="hotel-details">
             <h2>Krystal Grand Cancun ★★★★</h2>
             <p>Superior Oceanfront Double | All Inclusive | 7 days</p>
@@ -61,5 +107,6 @@
     <footer class="site-footer">
       <p>&copy; 2024 MFD Hotels. All rights reserved.</p>
     </footer>
+    <script src="Search.js"></script>
   </body>
 </html>

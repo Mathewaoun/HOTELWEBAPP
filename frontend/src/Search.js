@@ -1,11 +1,50 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const selectButtons = document.querySelectorAll('.select-button');
+document.addEventListener('DOMContentLoaded', function() {
+  const searchButton = document.getElementById('search-btn');
+  const inputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+  const radioButtons = document.querySelectorAll('input[type="radio"]');
+  const select = document.getElementById('hotel-chain');
+  const checkInInput = document.getElementById('checkin');
+  const checkOutInput = document.getElementById('checkout');
 
-  selectButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      e.preventDefault();
-      const hotelName = button.closest('.hotel-option').querySelector('.hotel-details h2').textContent;
-      window.location.href = button.getAttribute('href'); 
-    });
+  checkInInput.addEventListener('change', function() {
+    const selectedDate = this.value;
+    checkOutInput.setAttribute('min', selectedDate);
+  });
+
+  function validateFields() {
+    const allFieldsFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+    if (!allFieldsFilled) {
+      alert('Please fill in all the text, date, and number fields.');
+      return false;
+    }
+
+    const selectFieldFilled = select.value !== '0'; 
+    if (!selectFieldFilled) {
+      alert('Please select a hotel chain from the dropdown menu.');
+      return false;
+    }
+
+    const radioGroupChecked = Array.from(radioButtons).some(radio => radio.checked);
+    if (!radioGroupChecked) {
+      alert('Please select a star rating.');
+      return false;
+    }
+
+    const checkInDate = new Date(checkInInput.value);
+    const checkOutDate = new Date(checkOutInput.value);
+
+    if (!(checkInDate < checkOutDate)) {
+      alert('The check-in date must be before the check-out date.');
+      return false;
+    }
+
+    return true;
+  }
+
+  searchButton.addEventListener('click', function(event) {
+    event.preventDefault(); 
+    if (validateFields()) {
+      window.location.href = 'Search.html';
+    }
   });
 });
