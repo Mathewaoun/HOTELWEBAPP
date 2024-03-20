@@ -10,7 +10,7 @@
     <div class="form-container">
       <h1>Payment Information</h1>
       <form action="submit-payment.php" method="post">
-        <!-- Repeat this block for each traveler -->
+
         <div class="traveler-info">
           <h2>Traveler Information</h2>
           <div class="form-group">
@@ -21,7 +21,6 @@
           <div class="form-group">
             <label for="middleName">Middle Name:</label>
             <input type="text" id="middleName" name="middleName" />
-            <!-- Not required as some people may not have a middle name -->
           </div>
 
           <div class="form-group">
@@ -57,7 +56,7 @@
             type="text"
             id="phoneNumber"
             name="phoneNumber"
-            pattern="[+]?[0-9]{1,4}[\s\-]?([0-9]{10}|([0-9]{3}[\s\-]?){2}[0-9]{4})"
+            pattern="[0-9]{10}"
             title="Enter a valid phone number"
             required
           />
@@ -107,8 +106,9 @@
           />
         </div>
 
-        <input type="submit" value="Book!" />
+        <input type="submit" value="Book!"/>
       </form>
     </div>
+    <script src="payment.js"></script>
   </body>
 </html>

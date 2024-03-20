@@ -1,5 +1,5 @@
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 * {
@@ -41,7 +41,7 @@ body {
 }
 
 .contact-main {
-  flex: 1;  /* This will make the main content grow and take up available space */
+  flex: 1;  
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -55,7 +55,7 @@ body {
 }
 
 .contact-main .hotels-list {
-  width: 100%;  /* Ensures the list takes up all horizontal space of its parent */
+  width: 100%;  
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -66,7 +66,7 @@ body {
   border: 1px solid #ddd;
   margin: 10px;
   padding: 15px;
-  width: calc(33.333% - 20px); /* Adjust based on your margin */
+  width: calc(33.333% - 20px); 
   box-sizing: border-box;
   transition: transform 0.3s ease; 
   box-shadow: 0 0 10px rgba(0,0,0,0.1);

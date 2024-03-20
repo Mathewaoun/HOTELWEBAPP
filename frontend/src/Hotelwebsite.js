@@ -1,32 +1,46 @@
-// JavaScript code to handle the guest dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const searchButton = document.getElementById('search-btn');
+  const inputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]');
+  const radioButtons = document.querySelectorAll('input[type="radio"]');
+  const select = document.getElementById('hotel-chain');
+  const checkInInput = document.getElementById('checkin');
+  const checkOutInput = document.getElementById('checkout');
 
-function toggleGuestDropdown() {
-    var dropdown = document.getElementById("guestDropdown");
-    var summary = document.getElementById("guests-summary");
-    summary.classList.toggle("active");
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  function validateFields() {
+    const allFieldsFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+    if (!allFieldsFilled) {
+      alert('Please fill in all the text, date, and number fields.');
+      return false;
+    }
+
+    const selectFieldFilled = select.value !== '';
+    if (!selectFieldFilled) {
+      alert('Please select a hotel chain from the dropdown menu.');
+      return false;
+    }
+
+    const radioGroupChecked = Array.from(radioButtons).some(radio => radio.checked);
+    if (!radioGroupChecked) {
+      alert('Please select a star rating.');
+      return false;
+    }
+
+    const checkInDate = new Date(checkInInput.value);
+    const checkOutDate = new Date(checkOutInput.value);
+
+    if (!(checkInDate < checkOutDate)) {
+      alert('The check-in date must be before the check-out date.');
+      return false;
+    }
+
+    return true;
   }
-  
-  function changeGuestCount(guestType, delta) {
-    var countElement = document.getElementById(guestType + "Count");
-    var currentCount = parseInt(countElement.textContent, 10);
-    
-    currentCount = Math.max(currentCount + delta, 0); 
-    countElement.textContent = currentCount;
-  
-    var adultCount = document.getElementById("adultCount").textContent;
-    var childCount = document.getElementById("childCount").textContent;
-    document.getElementById("guests-summary").textContent = `${adultCount} Adult${adultCount !== '1' ? 's' : ''}, ${childCount} Child${childCount !== '1' ? 'ren' : ''}`;
-  }
-  
-  window.addEventListener('click', function(event) {
-    if (!event.target.matches('#guests-summary')) {
-      var dropdown = document.getElementById("guestDropdown");
-      var summary = document.getElementById("guests-summary");
-      if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-        summary.classList.remove("active");
-      }
+
+  searchButton.addEventListener('click', function(event) {
+    if (!validateFields()) {
+      event.preventDefault();
+    } else {
+      window.location.href = 'Search.html'; 
     }
   });
-  
+});
