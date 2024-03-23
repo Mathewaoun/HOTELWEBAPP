@@ -13,7 +13,7 @@ router.get('/backend', async (req, res) => {
   const rooms = await getRooms();
   const customers = await getCustomers();
   const bookings = await getBookings();
-  res.json({ archive, addresses, chains, hotels, employees, rooms, customers, bookings });
+  res.json({ archive, addresses, chains, hotels, employees, rooms, customers, bookings});
 
 });
 
@@ -350,5 +350,139 @@ async function getCustomerById(id) {
     return customer;
   } catch (error) {
     throw new Error(`Error fetching customer by id: ${error.message}`);
+  }
+}
+
+async function roomAvailability(bookingdate, status) {
+  try {
+    // Validate input parameters
+    if (!bookingdate || !status) {
+      throw new Error('Invalid input parameters');
+    }
+
+    const row = await new Promise((resolve, reject) => {
+      db.get('SELECT * FROM BOOKING_TABLE WHERE COLUMN_BOOKING_DATE_BOOKED = ?', [bookingdate], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+
+    if (row && row.COLUMN_BOOKING_IS_RENTING === 'Renting') {
+      throw new Error('Room not available');
+    }
+
+    // Check if the booking date has already been selected
+    if (row) {
+      throw new Error('Booking date already taken');
+    }
+
+    // If no error has been thrown, the room is available
+    return 'Room available';
+    
+  } catch (error) {
+    throw new Error(`Error checking room availability: ${error.message}`);
+  }
+}
+
+async function validEmployeeID(id) {
+  try {
+      const row = await new Promise((resolve, reject) => {
+          db.get('SELECT * FROM EMPLOYEE_TABLE WHERE COLUMN_EMPLOYEE_ID = ?', [id], (err, row) => {
+              if (err) {
+                  reject(err);
+              } else {
+                  resolve(row);
+              }
+          });
+      });
+
+      // If row is null, the ID does not exist in the database
+      if (!row) {
+          return false;
+      } else {
+          return true;
+      }
+
+  } catch (error) {
+      console.error('Error validating employee ID:', error);
+      return false; // Return false in case of error
+  }
+}
+
+async function updateArchive(archiveId, newData) {
+  try {
+    const { firstName, lastName, roomNumber, checkInDate, checkOutDate, bookingDate } = newData;
+
+    // Update existing archive record in the database
+    await new Promise((resolve, reject) => {
+      db.run(
+        'UPDATE ARCHIVE_TABLE SET COLUMN_CUSTOMER_FIRST_NAME = ?, COLUMN_CUSTOMER_LAST_NAME = ?, COLUMN_ROOM_NUMBER = ?, COLUMN_CHECK_IN_DATE = ?, COLUMN_CHECK_OUT_DATE = ?, COLUMN_BOOKING_DATE = ? WHERE COLUMN_ARCHIVE_ID = ?',
+        [firstName, lastName, roomNumber, checkInDate, checkOutDate, bookingDate, archiveId],
+        function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+    throw new Error(`Error updating archive: ${error.message}`);
+  }
+}
+
+
+async function deleteArchive(archiveId) {
+  // Delete archive record from the database
+  try {
+    const { firstName, lastName, roomNumber, checkInDate, checkOutDate, bookingDate } = newData;
+
+    // Update existing archive record in the database
+    await new Promise((resolve, reject) => {
+      db.run(
+        'DELETE ARCHIVE_TABLE SET COLUMN_CUSTOMER_FIRST_NAME = ?, COLUMN_CUSTOMER_LAST_NAME = ?, COLUMN_ROOM_NUMBER = ?, COLUMN_CHECK_IN_DATE = ?, COLUMN_CHECK_OUT_DATE = ?, COLUMN_BOOKING_DATE = ? WHERE COLUMN_ARCHIVE_ID = ?',
+        [firstName, lastName, roomNumber, checkInDate, checkOutDate, bookingDate, archiveId],
+        function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+    throw new Error(`Error updating archive: ${error.message}`);
+  }
+}
+
+// Similar functions for addresses, chains, and other entities
+async function updateEmpoyee(EmployeeId, newData) {
+  try {
+    const { firstName, lastName, hotelId, checkInDate, username, passwor, addressId, employeeRole, employeeId} = newData;
+
+    // Update existing archive record in the database
+    await new Promise((resolve, reject) => {
+      db.run(
+        'UPDATE EMPLOYEE_TABLE SET COLUMN_EMPLOYEE_FIRST_NAME = ?, COLUMN_EMPLOYEE_LAST_NAME = ?, COLUMN_EMPLOYEE_HOTEL_ID = ?,  COLUMN_EMPLOYEE_USERNAME = ?, COLUMN_EMPLOYEE_PASSWORD  = ?, COLUMN_EMPLOYEE_ADDRESS_ID = ?, COLUMN_EMPLOYEE_ROLE = ? WHERE COLUMN_EMPLOYEE_ID = ?',
+        [firstName, lastName, hotelId, checkInDate, username, passwor, addressId, employeeRole, employeeId],
+        function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+    throw new Error(`Error updating archive: ${error.message}`);
   }
 }
