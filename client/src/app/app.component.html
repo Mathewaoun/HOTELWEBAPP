@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Hotel!</title>
+</head>
+<body>
+  <nav class="site-navigation">
+    <div class="site-logo">MFD Hotels</div>
+    <ul class="nav-links">
+      <li class="nav-item"><a>Home</a></li>
+      <li class="nav-item"><a>Book</a></li>
+      <li class="nav-item"><a>Contact Us</a></li>
+      <li class="nav-item"><a>Employee Portal</a></li>
+    </ul>
+  </nav>
+  <header class="main-header">
+    <div class="header-img-wrapper">
+      <div class="header-text">
+        <h2>Enjoy Your Dream Hotel</h2>
+        <p>Book Hotels at the lowest price.</p>
+      </div>
+      <div class="booking-wrapper">
+        <form id="bookingForm" [formGroup] = "searchForm">
+          <div class="form-section">
+            <div class="input-wrapper">
+              <select formControlName = "location" id="location" name="location" required>
+                <option value="" disabled selected>Select Location</option>
+                <option *ngFor="let location of hotelLocations">{{ location.city }}</option>
+                <option value="any">Any</option>
+              </select>
+            </div>
+            <p>Where?</p>
+          </div>
+          <div class="form-section">
+            <div class="input-wrapper">
+              <input formControlName = "checkInDate" type="date" id="checkin" name="checkin" required>
+            </div>
+            <p>Check In</p>
+          </div>
+          <div class="form-section">
+            <div class="input-wrapper">
+              <input formControlName = "checkOutDate" type="date" id="checkout" name="checkout" required>
+            </div>
+            <p>Check Out</p>
+          </div>
+          <div class="form-section">
+            <div class="input-wrapper">
+              <input formControlName = "roomCapacity" type="number" id="room-capacity" name="room-capacity" placeholder="Room Capacity" min="1" max = "6" required>
+            </div>
+            <p>Room Capacity</p>
+          </div>
+          <div class="form-section">
+            <div class="input-wrapper">
+              <select formControlName = "hotelChain" id="hotel-chain" name="hotel-chain"required>
+                <option value="" disabled selected>Select Hotel Chain</option>
+                <option *ngFor="let chain of chains">{{ chain.name }}</option>
+                <option value="any">Any</option>
+              </select>
+            </div>
+            <p>Hotel Chain</p>
+          </div>
+          <div class="form-section">
+            <div class="star-rating" id="rating">
+              <input type="radio" id="5-stars" name="ratingControl" value="5" formControlName="ratingControl" required>
+              <label for="5-stars" class="star">&#9733;</label>
+
+              <input type="radio" id="4-stars" name="ratingControl" value="4" formControlName="ratingControl">
+              <label for="4-stars" class="star">&#9733;</label>
+
+              <input type="radio" id="3-stars" name="ratingControl" value="3" formControlName="ratingControl">
+              <label for="3-stars" class="star">&#9733;</label>
+
+              <input type="radio" id="2-stars" name="ratingControl" value="2" formControlName="ratingControl">
+              <label for="2-stars" class="star">&#9733;</label>
+
+              <input type="radio" id="1-star" name="ratingControl" value="1" formControlName="ratingControl">
+              <label for="1-star" class="star">&#9733;</label>
+            </div>
+            <p>Rating</p>
+          </div>
+          <button id="search-btn" type="submit" class="search-btn" (click) = "validateSearch()">Search</button>
+        </form>
+      </div>
+    </div>
+  </header>
+  <router-outlet></router-outlet>
+</body>
+</html>
