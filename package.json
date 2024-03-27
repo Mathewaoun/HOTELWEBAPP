@@ -1,22 +1,24 @@
 {
-  "name": "HOTELWEBAPP",
+  "name": "mfd",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd frontend && ng serve --port 3000\" \"cd server && node app.js\"",
-    "build": "ng build --prod"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd client && ng serve --port 4000\" \"cd server && node app.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@angular/common": "^17.3.1",
+    "chai": "^5.1.0",
+    "chai-http": "^4.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "mocha": "^10.3.0"
   }
 }
