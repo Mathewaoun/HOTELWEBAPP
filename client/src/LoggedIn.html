@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Room Availability Info</title>
-    <link rel="stylesheet" href="LoggedIn.css">
-</head>
-<body>
+    <link rel="stylesheet" href="LoggedIn.css" />
+  </head>
+  <body>
     <header>
-        <h1>ROOM AVAILABLE INFO</h1>
+      <h1>ROOM AVAILABLE INFO</h1>
     </header>
     <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Price</th>
-                    <th>Capacity</th>
-                    <th>Location</th>
-                    <th>Renting or Booking</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>$100/night</td>
-                    <td>2 Adults</td>
-                    <td>Paris</td>
-                    <td><button class="toggle-status" onclick="toggleStatus(this)">Booking</button></td>
-                </tr>
-            </tbody>
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <th>ID/Confirm Code</th>
+            <th>Customer</th>
+            <th>Hotel Chain</th>
+            <th>Hotel Name</th>
+            <th>Price</th>
+            <th>Capacity</th>
+            <th>Renting or Booking</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Mathew</td>
+            <td>Holiday Inn</td>
+            <td>Anything</td>
+            <td>100$/Person</td>
+            <td>6</td>
+            <td>
+              <button class="toggle-status" onclick="toggleStatus(this)">
+                Booking
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </main>
     <script src="LoggedIn.js"></script>
-</body>
+  </body>
 </html>

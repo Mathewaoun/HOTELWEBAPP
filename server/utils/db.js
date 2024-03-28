@@ -15,10 +15,7 @@ function connectToDatabase() {
   const db = new sqlite3.Database('./db/database.db', (err) => {
     if (err) {
       console.error('Error connecting to SQLite database:', err);
-    } else {
-      console.log('Connected to SQLite database in db.js.');
-    }
-  });
+    }});
 
   return db;
 }
@@ -967,10 +964,7 @@ function closeDatabase(db) {
     db.close((err) => {
       if (err) {
         console.error('Error closing database:', err);
-      } else {
-        console.log('Database connection closed');
-      }
-    });
+      }});
 }
 
 module.exports = { 
