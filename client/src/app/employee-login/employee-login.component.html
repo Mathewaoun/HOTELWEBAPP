@@ -7,11 +7,11 @@
 </head>
 <body>
     <div class="login-container">
-        <form id="loginForm">
+        <form id="loginForm" [formGroup] = "loginForm">
             <label for="employeeId">Employee Username:</label>
-            <input type="text" id="employeeId" name="username" required>
+            <input formControlName = "username" type="text" id="employeeId" name="username" required>
             <label for="employeepass">Employee Password:</label>
-            <input type="text" id="employeepass" name="password" required>
+            <input formControlName = "password" type="password" id="employeepass" name="password" required>
             <button type="submit" (click) = "validateLogin()">Submit</button>
         </form>
     </div>

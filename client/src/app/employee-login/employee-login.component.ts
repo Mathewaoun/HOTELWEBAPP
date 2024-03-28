@@ -4,26 +4,26 @@ import Employee from '../../../../server/models/Employee';
 import { forkJoin } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-employee-login',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, ReactiveFormsModule],
   templateUrl: './employee-login.component.html',
   styleUrl: './employee-login.component.css'
 })
 
 export class EmployeeLoginComponent implements OnInit{
 
-  searchForm: FormGroup;
+  loginForm: FormGroup;
   apiService: ApiService;
   employees: Employee[] = [];
 
   constructor(private fb: FormBuilder, apiService: ApiService, private router: Router) {
     this.apiService = apiService;
-    this.searchForm = this.fb.group({
+    this.loginForm = this.fb.group({
       username: [''],
       password: ['']
     });
@@ -50,14 +50,18 @@ export class EmployeeLoginComponent implements OnInit{
     }
   }
 
-  validateLogin() {
-    let username = this.searchForm.get('username')?.value;
-    let password = this.searchForm.get('password')?.value;
+  validateLogin() : void {
+    const user = this.loginForm.get('username');
+    const pass = this.loginForm.get('password');
 
-    if (username === '' || password === '') {
-      alert('Please enter a username and password.');
-    } else {
-      this.loginEmployee(username, password);
+    if(user && pass) {
+      const username = user.value;
+      const password = pass.value;
+      if (username === '' || password === '') {
+        alert('Please enter a username and password.');
+      } else {
+        this.loginEmployee(username, password);
+      }
     }
   }
 
