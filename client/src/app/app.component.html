@@ -14,6 +14,8 @@
       <li class="nav-item"><a>Book</a></li>
       <li class="nav-item"><a>Contact Us</a></li>
       <li class="nav-item"><a (click) = "goToEmployeeLogin()">Employee Login</a></li>
+      <li class="nav-item"><a (click) = "goToCustomerLogin()">Log In/Sign up</a></li>
+
     </ul>
   </nav>
   <div *ngIf="displaySearchBar">
@@ -22,7 +24,14 @@
   <div *ngIf="showEmployeeLogin">
     <router-outlet></router-outlet>
   </div>
+  <div *ngIf="customerLogin">
+    <router-outlet></router-outlet>
+  </div>
+  <div *ngIf="customerSignup">
+    <router-outlet></router-outlet>
+  </div>
   
+
   
 </body>
 </html>

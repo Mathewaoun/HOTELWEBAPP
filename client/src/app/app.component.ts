@@ -24,6 +24,8 @@ export class AppComponent implements OnInit{
 
   showEmployeeLogin: boolean = false;
   displaySearchBar: boolean = true;
+  customerLogin: boolean = false;
+  customerSignup: boolean = false;
 
   constructor(private router: Router) {
 
@@ -37,6 +39,8 @@ export class AppComponent implements OnInit{
     console.log("Home clicked");
     this.showEmployeeLogin = false;
     this.displaySearchBar = true;
+    this.customerLogin=false;
+    this.customerSignup=false;
     this.router.navigateByUrl('/home/main');
   }
 
@@ -44,6 +48,19 @@ export class AppComponent implements OnInit{
     console.log("Employee login clicked");
     this.showEmployeeLogin = true;
     this.displaySearchBar = false;
+    this.customerLogin=false;
+    this.customerSignup=false;
     this.router.navigateByUrl('/employee-login');
+  }
+  goToCustomerLogin(): void {
+    this.customerLogin=true;
+    this.customerSignup=false;
+    this.router.navigateByUrl('/customer-login');
+
+  }
+  goToCustomerSignup(): void {
+    this.customerSignup=true;
+    this.router.navigateByUrl('/customer-signup');
+
   }
 }
