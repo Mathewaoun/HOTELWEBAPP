@@ -4,6 +4,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
 import { EmployeePortalComponent } from './employee-portal/employee-portal.component';
+import { AdminComponent } from './admin/admin.component';
+import { ContactComponent } from './contact/contact.component';
 
 
 export const routes: Routes = [
@@ -11,7 +13,10 @@ export const routes: Routes = [
   { path: 'home', component: AppComponent},
   { path: 'home/main', component: HomeComponent},
   { path: 'employee-login', component: EmployeeLoginComponent},
-  { path: 'employee-portal', component: EmployeePortalComponent}
+  { path: 'employee-portal', component: EmployeePortalComponent},
+  { path: 'admin', component: AdminComponent},
+  { path: 'contact', component: ContactComponent}
+
   // Add more routes as needed
 ];
 

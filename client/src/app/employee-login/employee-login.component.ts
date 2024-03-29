@@ -43,8 +43,13 @@ export class EmployeeLoginComponent implements OnInit{
   loginEmployee(username: string, password: string) {
     let employee = this.employees.find(employee => employee.userName === username);
     if (employee && employee.password === password) {
-      console.log('Employee logged in');
-      this.router.navigate(['/employee-portal'], { queryParams: { username, password } });
+      if(employee.userName === 'admin') {
+        console.log('Admin logged in');
+        this.router.navigate(['/admin']);
+      } else {
+        console.log('Employee logged in');
+        this.router.navigate(['/employee-portal'], { queryParams: { username, password } });
+      }
     } else {
       alert('Invalid username or password. Please try again.');
     }

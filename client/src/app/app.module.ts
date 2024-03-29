@@ -11,13 +11,17 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
 import { EmployeePortalComponent } from './employee-portal/employee-portal.component';
+import { AdminComponent } from './admin/admin.component';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     EmployeeLoginComponent,
-    EmployeePortalComponent
+    EmployeePortalComponent,
+    AdminComponent,
+    ContactComponent
   ],
   imports: [
     CommonModule,
