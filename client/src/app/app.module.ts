@@ -10,12 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
+import { EmployeePortalComponent } from './employee-portal/employee-portal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     EmployeeLoginComponent,
+    EmployeePortalComponent
   ],
   imports: [
     CommonModule,
