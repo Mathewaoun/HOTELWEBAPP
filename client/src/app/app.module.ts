@@ -13,7 +13,9 @@ import { EmployeeLoginComponent } from './employee-login/employee-login.componen
 import { CustomerLoginComponent } from './customer-login/customer-login.component';
 import { CustomerSignupComponent } from './customer-signup/customer-signup.component';
 
-
+import { EmployeePortalComponent } from './employee-portal/employee-portal.component';
+import { AdminComponent } from './admin/admin.component';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,10 @@ import { CustomerSignupComponent } from './customer-signup/customer-signup.compo
     HomeComponent,
     EmployeeLoginComponent,
     CustomerLoginComponent,
-    CustomerSignupComponent
+    CustomerSignupComponent,
+    EmployeePortalComponent,
+    AdminComponent,
+    ContactComponent
   ],
   imports: [
     CommonModule,

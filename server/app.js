@@ -4,7 +4,7 @@ const apiRoutes = require('./routes/api');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { connectToDatabase, getChains } = require('./utils/db');
-const { createDatabase, populateDatabase, closeDatabase } = require('./db/initDB');
+const { createDatabase, populateDatabase, closeDatabase, createAdmin } = require('./db/initDB');
 
 const app = express();
 

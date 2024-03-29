@@ -239,7 +239,7 @@ function createDatabase() {
   db.run(`CREATE TABLE ${BOOKING_TABLE} (
     ${COLUMN_BOOKING_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${COLUMN_BOOKING_CUSTOMER_ID} INTEGER NOT NULL,
-    ${COLUMN_BOOKING_EMPLOYEE_ID} INTEGER NOT NULL,
+    ${COLUMN_BOOKING_EMPLOYEE_ID} INTEGER,
     ${COLUMN_BOOKING_ROOM_ID} INTEGER NOT NULL,
     ${COLUMN_BOOKING_ARCHIVE_ID} INTEGER,
     ${COLUMN_BOOKING_DATE_BOOKED} TEXT NOT NULL,
@@ -619,6 +619,44 @@ function populateDatabase() {
   closeDatabase(db);
 }
 
+function createAdmin() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const admin = new Employee(26, -1, "System", "Administrator", "admin", "admin", -1, "Admin");
+  db.run(`INSERT INTO ${EMPLOYEE_TABLE} 
+                    (${COLUMN_EMPLOYEE_HOTEL_ID}, 
+                      ${COLUMN_EMPLOYEE_FIRST_NAME}, 
+                      ${COLUMN_EMPLOYEE_LAST_NAME}, 
+                      ${COLUMN_EMPLOYEE_USERNAME}, 
+                      ${COLUMN_EMPLOYEE_PASSWORD}, 
+                      ${COLUMN_EMPLOYEE_ADDRESS_ID}, 
+                      ${COLUMN_EMPLOYEE_ROLE}) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?)`, [admin.getHotelId(), 
+                                                      admin.getFirstName(), 
+                                                      admin.getLastName(), 
+                                                      admin.getUserName(), 
+                                                      admin.getPassword(), 
+                                                      admin.getAddressId(), 
+                                                      admin.getRole()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting Admin:', err.message);
+                        } else {
+                            console.log('Admin inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+
+  closeDatabase(db);
+}
+
 function closeDatabase(db) {
   db.close((err) => {
     if (err) {
@@ -632,6 +670,7 @@ function closeDatabase(db) {
 module.exports = {
   createDatabase: createDatabase,
   populateDatabase: populateDatabase,
-  closeDatabase: closeDatabase
+  closeDatabase: closeDatabase, 
+  createAdmin: createAdmin
 };
 

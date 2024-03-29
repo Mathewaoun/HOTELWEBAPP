@@ -1,0 +1,49 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room Availability Info</title>
+
+  </head>
+  <body>
+    <header>
+      <h1>ROOM AVAILABLE INFO</h1>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Customer</th>
+            <th>Room Number</th>
+            <th>Date Booked</th>
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
+            <th>Currently Renting?</th>
+            <th>Price</th>
+            <th>Capacity</th>
+            <th>Payment Received?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let booking of bookingData">
+            
+            <td>{{ booking.id}}</td>
+            <td>{{ booking.customerName }}</td>
+            <td>{{ booking.roomNumber }}</td>
+            <td>{{ booking.dateBooked }}</td>
+            <td>{{ booking.checkInDate }}</td>
+            <td>{{ booking.checkOutDate }}</td>
+            <td>{{ booking.isRenting }}</td>
+            <td>{{ booking.price }}</td>
+            <td>{{ booking.capacity }}</td>
+            <td>{{ booking.isPaid }}</td>
+            <td>
+              <button class="toggle-status" onclick="toggleStatus(this)">
+                Booking
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
