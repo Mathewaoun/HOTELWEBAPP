@@ -61,7 +61,6 @@ async function getCustomers() {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -245,7 +244,6 @@ async function getCustomerByID(id) {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -275,7 +273,6 @@ async function getCustomerByEmail(email) {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -796,29 +793,33 @@ async function getHotelNumRoomsByID(id) {
   });
 }
 
-function insertCustomer(c) {
-    db.run(`INSERT INTO ${CUSTOMER_TABLE} 
-                    (${COLUMN_CUSTOMER_IDENTIFICATION}, 
-                      ${COLUMN_CUSTOMER_FIRST_NAME}, 
-                      ${COLUMN_CUSTOMER_LAST_NAME}, 
-                      ${COLUMN_CUSTOMER_EMAIL}, 
-                      ${COLUMN_CUSTOMER_PASSWORD}, 
-                      ${COLUMN_CUSTOMER_REGISTRATION_DATE}, 
-                      ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
-                      ${COLUMN_CUSTOMER_CARD_NUMBER}, 
-                      ${COLUMN_CUSTOMER_CVV}, 
-                      ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
-                      ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
-                      ${COLUMN_CUSTOMER_ADDRESS_ID}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getRegistrationDate(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting customer:', err.message);
-                        } else {
-                            console.log('Customer inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertCustomer(c) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${CUSTOMER_TABLE} 
+                  (${COLUMN_CUSTOMER_IDENTIFICATION}, 
+                    ${COLUMN_CUSTOMER_FIRST_NAME}, 
+                    ${COLUMN_CUSTOMER_LAST_NAME}, 
+                    ${COLUMN_CUSTOMER_EMAIL}, 
+                    ${COLUMN_CUSTOMER_PASSWORD},  
+                    ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
+                    ${COLUMN_CUSTOMER_CARD_NUMBER}, 
+                    ${COLUMN_CUSTOMER_CVV}, 
+                    ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
+                    ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
+                    ${COLUMN_CUSTOMER_ADDRESS_ID}) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting customer:', err.message);
+                      } else {
+                          console.log('Customer inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+
+  closeDatabase(db);
+
+  return result;
 }
 
 function insertBooking(b) {
@@ -923,22 +924,27 @@ function insertChain(c) {
                     });
 }
 
-function insertAddress(a) {
-    db.run(`INSERT INTO ${ADDRESS_TABLE} 
-                    (${COLUMN_ADDRESS_STREET}, 
-                      ${COLUMN_ADDRESS_APT}, 
-                      ${COLUMN_ADDRESS_POSTAL}, 
-                      ${COLUMN_ADDRESS_PROVINCE}, 
-                      ${COLUMN_ADDRESS_CITY}) 
-                      VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting address:', err.message);
-                        } else {
-                            console.log('Address inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertAddress(a) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${ADDRESS_TABLE} 
+                  (${COLUMN_ADDRESS_STREET}, 
+                    ${COLUMN_ADDRESS_APT}, 
+                    ${COLUMN_ADDRESS_POSTAL}, 
+                    ${COLUMN_ADDRESS_PROVINCE}, 
+                    ${COLUMN_ADDRESS_CITY}) 
+                    VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting address:', err.message);
+                      } else {
+                          console.log('Address inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+
+  closeDatabase(db);
+
+  return result;
 }
 
 function insertArchive(archive) {

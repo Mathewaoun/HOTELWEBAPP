@@ -32,35 +32,30 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.router.navigateByUrl('/home/main');
+    this.router.navigate(['/home/main']);
   }
 
   goHome(): void {
     console.log("Home clicked");
-    this.showEmployeeLogin = false;
-    this.displaySearchBar = true;
-    this.customerLogin=false;
-    this.customerSignup=false;
-    this.router.navigateByUrl('/home/main');
+    this.router.navigate(['/home/main']);
   }
 
   goToEmployeeLogin(): void {
     console.log("Employee login clicked");
-    this.showEmployeeLogin = true;
-    this.displaySearchBar = false;
-    this.customerLogin=false;
-    this.customerSignup=false;
-    this.router.navigateByUrl('/employee-login');
+
+    this.router.navigate(['/employee-login']);
   }
+
   goToCustomerLogin(): void {
-    this.customerLogin=true;
-    this.customerSignup=false;
-    this.router.navigateByUrl('/customer-login');
+    this.router.navigate(['/customer-login']);
 
   }
-  goToCustomerSignup(): void {
-    this.customerSignup=true;
-    this.router.navigateByUrl('/customer-signup');
 
+  goToCustomerSignup(): void {
+    this.router.navigate(['/customer-signup']);
+  }
+
+  goToContact(): void {
+    this.router.navigate(['/contact']);
   }
 }

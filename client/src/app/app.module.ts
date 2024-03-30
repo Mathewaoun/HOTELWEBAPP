@@ -5,28 +5,30 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
 import { CustomerLoginComponent } from './customer-login/customer-login.component';
 import { CustomerSignupComponent } from './customer-signup/customer-signup.component';
-
 import { EmployeePortalComponent } from './employee-portal/employee-portal.component';
 import { AdminComponent } from './admin/admin.component';
 import { ContactComponent } from './contact/contact.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    AdminComponent,
     EmployeeLoginComponent,
+    EmployeePortalComponent,
+    ConfirmationComponent,
+    ContactComponent,
     CustomerLoginComponent,
     CustomerSignupComponent,
-    EmployeePortalComponent,
-    AdminComponent,
-    ContactComponent
+    HomeComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

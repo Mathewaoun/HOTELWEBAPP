@@ -1,12 +1,11 @@
 class Customer {
-    constructor(id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId) {
+    constructor(id, identification, firstName, lastName, email, password, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId) {
         this.id = id;
         this.identification = identification;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.registrationDate = registrationDate;
         this.cardholderName = cardholderName;
         this.cardNumber = cardNumber;
         this.cvv = cvv;
@@ -61,14 +60,6 @@ class Customer {
 
     setPassword(password) {
         this.password = password;
-    }
-
-    getRegistrationDate() {
-        return this.registrationDate;
-    }
-
-    setRegistrationDate(registrationDate) {
-        this.registrationDate = registrationDate;
     }
 
     getCardholderName() {

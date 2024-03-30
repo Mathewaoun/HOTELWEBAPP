@@ -146,4 +146,20 @@ export class ApiService {
     return this.http.get<Booking>(`${this.baseUrl}/booking/${id}`);
   }
 
+  createCustomer(customer: Customer): Observable<Customer> {
+    console.log("Reached createCustomer in api-service");
+    return this.http.post<Customer>(`${this.baseUrl}/createCustomer`, customer);
+  }
+
+  createAddress(address: Address): Observable<Address> {
+    console.log("Reached createAddress in api-service");
+    return this.http.post<Address>(`${this.baseUrl}/createAddress`, address);
+  }
+
+  createBooking(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(`${this.baseUrl}/createBooking`, booking);
+  }
+
+
+
 }

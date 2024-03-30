@@ -74,7 +74,6 @@ COLUMN_CUSTOMER_FIRST_NAME            = "COLUMN_CUSTOMER_FIRST_NAME";
 COLUMN_CUSTOMER_LAST_NAME             = "COLUMN_CUSTOMER_LAST_NAME";
 COLUMN_CUSTOMER_EMAIL                 = "COLUMN_CUSTOMER_EMAIL";
 COLUMN_CUSTOMER_PASSWORD              = "COLUMN_CUSTOMER_PASSWORD";
-COLUMN_CUSTOMER_REGISTRATION_DATE     = "COLUMN_CUSTOMER_REGISTRATION_DATE";
 COLUMN_CUSTOMER_CARDHOLDER_NAME       = "COLUMN_CUSTOMER_CARDHOLDER_NAME";
 COLUMN_CUSTOMER_CARD_NUMBER           = "COLUMN_CUSTOMER_CARD_NUMBER";
 COLUMN_CUSTOMER_CVV                   = "COLUMN_CUSTOMER_CVV";
@@ -219,7 +218,6 @@ function createDatabase() {
     ${COLUMN_CUSTOMER_LAST_NAME} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_EMAIL} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_PASSWORD} TEXT NOT NULL,
-    ${COLUMN_CUSTOMER_REGISTRATION_DATE} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CARDHOLDER_NAME} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CARD_NUMBER} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CVV} TEXT NOT NULL,
@@ -425,12 +423,12 @@ function populateDatabase() {
 
   const rooms = [marriotRoom1, marriotRoom2, marriotRoom3, marriotRoom4, marriotRoom5, hiltonRoom1, hiltonRoom2, hiltonRoom3, hiltonRoom4, hiltonRoom5, bestWesternRoom1, bestWesternRoom2, bestWesternRoom3, bestWesternRoom4, bestWesternRoom5, holidayInnRoom1, holidayInnRoom2, holidayInnRoom3, holidayInnRoom4, holidayInnRoom5, sheratonRoom1, sheratonRoom2, sheratonRoom3, sheratonRoom4, sheratonRoom5];
 
-  const c1 = new Customer(1, "842803713", "John", "Doe", "email@gmail.com", "Password1!", "2021-01-01", "John Doe", "1415064812040635", "798", "2026-10-13", 1, 1);
-  const c2 = new Customer(2, "521741541", "Jane", "Doe", "jane@gmail.com", "Password1!", "2021-01-01", "Jane Doe", "7061703586553058", "992", "2025-07-08", 2, 2);
-  const c3 = new Customer(3, "281372011", "John", "Smith", "johnsmith@gmail.com", "Password1!", "2021-01-01", "John Smith", "0795504666575185", "199", "2025-04-15", 3, 3);
-  const c4 = new Customer(4, "767940234", "Jane", "Smith", "janesmith@gmail.com", "Password1!", "2021-01-01", "Jane Smith", "8508741780880762", "462", "2023-11-21", 4, 4);
-  const c5 = new Customer(5, "030023040", "John", "Johnson", "johnjohnson@gmail.com", "Password1!", "2021-01-01", "John Johnson", "1234567890123456", "123", "2024-12-31", 5, 5);
-  const c6 = new Customer(6, "484014832", "Jane", "Johnson", "janejohnson@gmail.com", "Password1!", "2021-01-01", "Jane Johnson", "9876543210987654", "987", "2025-01-01", 6, 6);
+  const c1 = new Customer(1, "842803713", "John", "Doe", "email@gmail.com", "Password1!", "John Doe", "1415064812040635", "798", "2026-10-13", 1, 1);
+  const c2 = new Customer(2, "521741541", "Jane", "Doe", "jane@gmail.com", "Password1!", "Jane Doe", "7061703586553058", "992", "2025-07-08", 2, 2);
+  const c3 = new Customer(3, "281372011", "John", "Smith", "johnsmith@gmail.com", "Password1!", "John Smith", "0795504666575185", "199", "2025-04-15", 3, 3);
+  const c4 = new Customer(4, "767940234", "Jane", "Smith", "janesmith@gmail.com", "Password1!", "Jane Smith", "8508741780880762", "462", "2023-11-21", 4, 4);
+  const c5 = new Customer(5, "030023040", "John", "Johnson", "johnjohnson@gmail.com", "Password1!", "John Johnson", "1234567890123456", "123", "2024-12-31", 5, 5);
+  const c6 = new Customer(6, "484014832", "Jane", "Johnson", "janejohnson@gmail.com", "Password1!", "Jane Johnson", "9876543210987654", "987", "2025-01-01", 6, 6);
 
   const customers = [c1, c2, c3, c4, c5, c6];
 
@@ -555,14 +553,13 @@ function populateDatabase() {
                       ${COLUMN_CUSTOMER_LAST_NAME}, 
                       ${COLUMN_CUSTOMER_EMAIL}, 
                       ${COLUMN_CUSTOMER_PASSWORD}, 
-                      ${COLUMN_CUSTOMER_REGISTRATION_DATE}, 
                       ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
                       ${COLUMN_CUSTOMER_CARD_NUMBER}, 
                       ${COLUMN_CUSTOMER_CVV}, 
                       ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
                       ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
                       ${COLUMN_CUSTOMER_ADDRESS_ID}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getRegistrationDate(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
                         if (err) {
                             // Handle the error here
                             console.error('Error inserting customer:', err.message);

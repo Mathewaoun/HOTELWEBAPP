@@ -128,11 +128,11 @@ router.get('/getAddresses', (req, res) => {
 });
 
 // create a new customer
-router.post('/createCustomer', (req, res) => {
+router.post('/createCustomer', async (req, res) => {
     try {
-        const {id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId} = req.body;
-        const newCustomer = new Customer(id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId);
-        insertCustomer(newCustomer);
+        const {id, identification, firstName, lastName, email, password, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId} = req.body;
+        const newCustomer = new Customer(id, identification, firstName, lastName, email, password, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId);
+        await insertCustomer(newCustomer);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -161,11 +161,11 @@ router.post('/createArchive', (req, res) => {
 });
 
 // create a new address
-router.post('/createAddress', (req, res) => {
+router.post('/createAddress', async (req, res) => {
     try {
-        const {id, street, apt, postalCode, city, province} = req.body;
-        const newAddress = new Address(id, street, apt, postalCode, city, province);
-        insertAddress(newAddress);
+        const {id, street, apt, postalCode, province, city} = req.body;
+        const newAddress = new Address(id, street, apt, postalCode, province, city);
+        await insertAddress(newAddress);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
