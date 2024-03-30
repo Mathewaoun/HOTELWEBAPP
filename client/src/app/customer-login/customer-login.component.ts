@@ -1,9 +1,11 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ApiService } from '../api-service.service';
 import { forkJoin } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoggedInUserService } from '../logged-in-user.service';
+import { Subscription } from 'rxjs';
 
 import Customer from '../../../../server/models/Customer';
 
@@ -14,13 +16,14 @@ import Customer from '../../../../server/models/Customer';
   templateUrl: './customer-login.component.html',
   styleUrls: ['./customer-login.component.css']
 })
-export class CustomerLoginComponent {
+export class CustomerLoginComponent implements OnInit, OnDestroy{
 
+  private subscription: Subscription = new Subscription;
   loginForm: FormGroup;
   apiService: ApiService;
   customers: Customer[] = [];
 
-  constructor(private fb: FormBuilder, apiService: ApiService, private router: Router) {
+  constructor(private loggedInUserService: LoggedInUserService, private fb: FormBuilder, apiService: ApiService, private router: Router) {
     this.apiService = apiService;
     this.loginForm = this.fb.group({
       email: [''],
@@ -29,7 +32,6 @@ export class CustomerLoginComponent {
   }
 
   ngOnInit() {
-    console.log('Customer Login Component Initialized');
     forkJoin({
       customers: this.apiService.getCustomers()
     
@@ -42,9 +44,9 @@ export class CustomerLoginComponent {
     let customer = this.customers.find(customer => customer.email === email);
     if (customer && customer.password === password) {
       alert('Customer logged in');
+      this.loggedInUserService.setLoggedInCustomer(customer);
       
-      // navigate to customer portal
-      // this.router.navigate(['/customer-portal']);
+      this.router.navigate(['/search-rooms']);
     } else {
       alert('Invalid username or password. Please try again.');
     }
@@ -67,6 +69,10 @@ export class CustomerLoginComponent {
 
   goToCustomerSignup(): void {
     this.router.navigate(['/customer-signup']); 
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
 

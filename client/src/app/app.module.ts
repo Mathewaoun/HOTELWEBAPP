@@ -16,6 +16,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ContactComponent } from './contact/contact.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { PaymentComponent } from './payment/payment.component';
+import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PaymentComponent } from './payment/payment.component';
     CustomerLoginComponent,
     CustomerSignupComponent,
     HomeComponent,
-    PaymentComponent
+    PaymentComponent,
+    SearchRoomsComponent
   ],
   imports: [
     CommonModule,

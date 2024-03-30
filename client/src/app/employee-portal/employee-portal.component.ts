@@ -92,6 +92,7 @@ export class EmployeePortalComponent {
       if (!employee || employee.password !== this.password) {
         alert('Invalid username or password. Please try again from the portal component');
         this.router.navigate(['/employee-login']);
+        return;
       }
 
       const hotel = employee ? this.hotels.find(hotel => hotel.id === employee.hotelId) : null;

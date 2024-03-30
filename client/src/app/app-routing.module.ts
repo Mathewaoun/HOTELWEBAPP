@@ -9,6 +9,7 @@ import { EmployeePortalComponent } from './employee-portal/employee-portal.compo
 import { AdminComponent } from './admin/admin.component';
 import { ContactComponent } from './contact/contact.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 
 
 export const routes: Routes = [
@@ -21,7 +22,8 @@ export const routes: Routes = [
   { path: 'employee-portal', component: EmployeePortalComponent},
   { path: 'admin', component: AdminComponent},
   { path: 'contact', component: ContactComponent},
-  { path: 'confirmation', component: ConfirmationComponent}
+  { path: 'confirmation', component: ConfirmationComponent},
+  { path: 'search-rooms', component: SearchRoomsComponent}
 
   // Add more routes as needed
 ];
