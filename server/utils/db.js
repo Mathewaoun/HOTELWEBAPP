@@ -822,28 +822,30 @@ async function insertCustomer(c) {
   return result;
 }
 
-function insertBooking(b) {
-    db.run(`INSERT INTO ${BOOKING_TABLE} 
-                    (${COLUMN_BOOKING_CUSTOMER_ID}, 
-                      ${COLUMN_BOOKING_EMPLOYEE_ID}, 
-                      ${COLUMN_BOOKING_ROOM_ID}, 
-                      ${COLUMN_BOOKING_ARCHIVE_ID}, 
-                      ${COLUMN_BOOKING_DATE_BOOKED}, 
-                      ${COLUMN_BOOKING_CUSTOMER_NAME}, 
-                      ${COLUMN_BOOKING_CHECK_IN_DATE}, 
-                      ${COLUMN_BOOKING_CHECK_OUT_DATE}, 
-                      ${COLUMN_BOOKING_NUM_PEOPLE}, 
-                      ${COLUMN_BOOKING_IS_RENTING}, 
-                      ${COLUMN_BOOKING_PAID_ONLINE}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [b.getCustomerId(), b.getEmployeeId(), b.getRoomId(), b.getArchiveId(), b.getDateBooked(), b.getCustomerName(), b.getCheckInDate(), b.getCheckOutDate(), b.getNumPeople(), b.getIsRenting(), b.getPaidOnline()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting booking:', err.message);
-                        } else {
-                            console.log('Booking inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertBooking(b) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${BOOKING_TABLE} 
+                  (${COLUMN_BOOKING_CUSTOMER_ID}, 
+                    ${COLUMN_BOOKING_EMPLOYEE_ID}, 
+                    ${COLUMN_BOOKING_ROOM_ID}, 
+                    ${COLUMN_BOOKING_ARCHIVE_ID}, 
+                    ${COLUMN_BOOKING_DATE_BOOKED}, 
+                    ${COLUMN_BOOKING_CUSTOMER_NAME}, 
+                    ${COLUMN_BOOKING_CHECK_IN_DATE}, 
+                    ${COLUMN_BOOKING_CHECK_OUT_DATE}, 
+                    ${COLUMN_BOOKING_NUM_PEOPLE}, 
+                    ${COLUMN_BOOKING_IS_RENTING}, 
+                    ${COLUMN_BOOKING_PAID_ONLINE}) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [b.getCustomerId(), b.getEmployeeId(), b.getRoomId(), b.getArchiveId(), b.getDateBooked(), b.getCustomerName(), b.getCheckInDate(), b.getCheckOutDate(), b.getNumPeople(), b.getIsRenting(), b.getPaidOnline()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting booking:', err.message);
+                      } else {
+                          console.log('Booking inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+  closeDatabase(db);
 }
 
 function insertRoom(r) {
@@ -947,23 +949,73 @@ async function insertAddress(a) {
   return result;
 }
 
-function insertArchive(archive) {
-    db.run(`INSERT INTO ${ARCHIVE_TABLE} 
-                    (${COLUMN_ARCHIVE_CUSTOMER_FIRST_NAME}, 
-                      ${COLUMN_ARCHIVE_CUSTOMER_LAST_NAME}, 
-                      ${COLUMN_ARCHIVE_ROOM_NUMBER}, 
-                      ${COLUMN_ARCHIVE_CHECK_IN_DATE}, 
-                      ${COLUMN_ARCHIVE_CHECK_OUT_DATE}, 
-                      ${COLUMN_ARCHIVE_BOOKING_DATE}) 
-                      VALUES (?, ?, ?, ?, ?, ?)`, [archive.getCustomerFirstName(), archive.getCustomerLastName(), archive.getRoomNumber(), archive.getCheckInDate(), archive.getCheckOutDate(), archive.getBookingDate()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting Archive:', err.message);
-                        } else {
-                            console.log('Archive inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertArchive(archive) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${ARCHIVE_TABLE} 
+                  (${COLUMN_ARCHIVE_CUSTOMER_FIRST_NAME}, 
+                    ${COLUMN_ARCHIVE_CUSTOMER_LAST_NAME}, 
+                    ${COLUMN_ARCHIVE_ROOM_NUMBER}, 
+                    ${COLUMN_ARCHIVE_CHECK_IN_DATE}, 
+                    ${COLUMN_ARCHIVE_CHECK_OUT_DATE}, 
+                    ${COLUMN_ARCHIVE_BOOKING_DATE}) 
+                    VALUES (?, ?, ?, ?, ?, ?)`, [archive.getCustomerFirstName(), archive.getCustomerLastName(), archive.getRoomNumber(), archive.getCheckInDate(), archive.getCheckOutDate(), archive.getBookingDate()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting Archive:', err.message);
+                      } else {
+                          console.log('Archive inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+  closeDatabase(db);
+}
+
+async function deleteChain(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM CHAIN_TABLE WHERE COLUMN_CHAIN_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting chain:', err);
+    } else {
+      console.log('Chain deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteHotel(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM HOTEL_TABLE WHERE COLUMN_HOTEL_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting hotel:', err);
+    } else {
+      console.log('Hotel deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteRoom(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM ROOM_TABLE WHERE COLUMN_ROOM_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting room:', err);
+    } else {
+      console.log('Room deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteEmployee(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM EMPLOYEE_TABLE WHERE COLUMN_EMPLOYEE_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting employee:', err);
+    } else {
+      console.log('Employee deleted successfully');
+    }
+  });
+  closeDatabase(db);
 }
 
 function closeDatabase(db) {
@@ -1014,5 +1066,9 @@ module.exports = {
     insertChain,
     insertAddress,
     insertArchive,
+    deleteChain,
+    deleteHotel,
+    deleteRoom,
+    deleteEmployee,
     closeDatabase
 };

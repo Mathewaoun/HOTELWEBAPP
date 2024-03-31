@@ -57,10 +57,10 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
       alert('Customer logged in');
       this.loggedInUserService.setLoggedInCustomer(customer);
       
-      if(this.availableRoomsFromQuery) {
+      if(this.availableRoomsFromQuery.length > 0) {
         this.router.navigate(['/search-rooms'], { queryParams: { availableRooms: this.availableRoomsFromQuery } });
       } else {
-        this.router.navigate(['/search-rooms']);
+        this.router.navigate(['/customer-landing']);
       }
     } else {
       alert('Invalid username or password. Please try again.');

@@ -160,6 +160,22 @@ export class ApiService {
     return this.http.post<Booking>(`${this.baseUrl}/createBooking`, booking);
   }
 
+  deleteChain(chain: Chain): Observable<Chain> {
+    return this.http.delete<Chain>(`${this.baseUrl}/deleteChain/${chain.id}`);
+  }
+
+  deleteHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.delete<Hotel>(`${this.baseUrl}/deleteHotel/${hotel.id}`);
+  }
+
+  deleteRoom(room: Room): Observable<Room> {
+    return this.http.delete<Room>(`${this.baseUrl}/deleteRoom/${room.id}`);
+  }
+
+  deleteEmployee(employee: Employee): Observable<Employee> {
+    return this.http.delete<Employee>(`${this.baseUrl}/deleteEmployee/${employee.id}`);
+  }
+
 
 
 }

@@ -4,13 +4,16 @@ const apiRoutes = require('./routes/api');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { connectToDatabase, getChains } = require('./utils/db');
-const { createDatabase, populateDatabase, closeDatabase, createAdmin, populateRooms } = require('./db/initDB');
+const { createEntireDatabase } = require('./db/initDB');
 
 const app = express();
 
 
 app.use(bodyParser.json());
 app.use(cors());
+
+createEntireDatabase();
+
 
 // Use API routes
 app.use('', apiRoutes);

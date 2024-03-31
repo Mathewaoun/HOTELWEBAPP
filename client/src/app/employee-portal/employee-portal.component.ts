@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '../api-service.service';
 import { forkJoin } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
@@ -11,8 +11,8 @@ import Chain from '../../../../server/models/Chain';
 import Customer from '../../../../server/models/Customer';
 import Room from '../../../../server/models/Room';
 import Employee from '../../../../server/models/Employee';
-
-
+import { LoggedInUserService } from '../logged-in-user.service';
+import { Subscription } from 'rxjs';
 
 
 export class BookingData {
@@ -50,6 +50,7 @@ export class BookingData {
 })
 export class EmployeePortalComponent {
 
+  subscription: Subscription = new Subscription;
   bookings: Booking[] = [];
   bookingData: BookingData[] = [];
   hotels: Hotel[] = [];
@@ -59,11 +60,14 @@ export class EmployeePortalComponent {
   customers: Customer[] = [];
   username!: string;
   password!: string;
+  currentEmployee!: Employee;
+
+  apiService: ApiService;
 
 
 
-
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+  constructor(private loggedInUserService: LoggedInUserService, private route: ActivatedRoute, apiService: ApiService, private router: Router) {
+    this.apiService = apiService;
   }
 
   ngOnInit() {
@@ -72,7 +76,6 @@ export class EmployeePortalComponent {
       this.password = params['password'];
     });
 
-    console.log('Employee Portal Component Initialized');
     forkJoin({
       bookings: this.apiService.getBookings(),
       hotels: this.apiService.getHotels(),
@@ -88,12 +91,13 @@ export class EmployeePortalComponent {
       this.customers = customers;
       this.employees = employees;
       
-      const employee = this.employees.find(employee => employee.userName === this.username);
-      if (!employee || employee.password !== this.password) {
-        alert('Invalid username or password. Please try again from the portal component');
-        this.router.navigate(['/employee-login']);
-        return;
-      }
+      let employee = new Employee();
+      this.loggedInUserService.getLoggedInEmployee().subscribe(e => {
+        employee = e;
+        if(employee.userName === 'admin') {
+            this.router.navigate(['/admin']);
+        }
+      });
 
       const hotel = employee ? this.hotels.find(hotel => hotel.id === employee.hotelId) : null;
       const hotelRooms = hotel ? this.rooms.filter(room => room.hotelId === hotel.id) : [];
@@ -123,8 +127,23 @@ export class EmployeePortalComponent {
 
     
   }
+
+  goToManagerPortal() {
+    const employee = this.loggedInUserService.getLoggedInEmployee().subscribe(employee => {
+      if(employee.role === 'Manager') {
+        this.router.navigate(['/admin']);
+      } else {
+        alert('You do not have permission to access this page.');
+      }
+    });
+
+  }
   
   logout() {
     this.router.navigate(['/employee-login']);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

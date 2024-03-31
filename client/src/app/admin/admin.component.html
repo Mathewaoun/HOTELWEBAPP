@@ -1,1 +1,174 @@
-<p>admin works!</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOTEL CHAIN INFO</title>
+  </head>
+  <body>
+    <div [ngSwitch] = "currentView">
+        <div *ngSwitchDefault>
+            <header>
+                <h1>HOTEL CHAIN INFO</h1>
+              </header>
+              <main>
+                <table>
+                  <thead>
+                    <tr>
+                        <th>Hotel Chain Name</th>
+                        <th>Chain Address</th>
+                        <th>Number of Locations</th>
+                        <th>Chain Email</th>
+                        <th>Chain Phone</th>
+                        <th>View Hotels of Chain</th>
+                        <th>Delete Entire Chain</th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody *ngFor = "let chain of chains">
+                    <tr>
+                      <td>{{ chain.name }}</td>
+                        <td>{{ getChainAddress(chain) }}</td>
+                        <td>{{ chain.numLocations }}</td>
+                        <td>{{ chain.email }}</td>
+                        <td>{{ chain.phoneNumbers }}</td>
+                      <td>
+                          <a class="view-hotel" (click) = "viewHotels(chain)">View Hotels</a>
+                      </td>
+                      <td>
+                          <button class="delete-chain" (click)="deleteChain(chain)">Delete Chain</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </main>
+        </div>
+
+        <div *ngSwitchCase = "'hotels'">
+            <header class="header-container">
+                <h1>
+                    {{ selectedChain.name }} Hotel Management Portal
+                    <button class="view-hotel" (click)="goBack()" style="padding: 10px 20px; font-size: 20px;">Go Back</button>
+                </h1>
+              </header>
+              <main>
+                <table>
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Rating</th>
+                        <th>Number of Rooms</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>View Rooms</th>
+                        <th>View Employees</th>
+                        <th>Delete Hotel</th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody *ngFor = "let hotel of hotelsOfChain">
+                    <tr>
+                        <td>{{ hotel.id }}</td>
+                        <td>{{ getRatingInStars(hotel.rating) }}</td>
+                        <td>{{ hotel.numRooms }}</td>
+                        <td>{{ getHotelAddress(hotel) }}</td>
+                        <td>{{ hotel.email }}</td>
+                        <td>{{ hotel.phone }}</td>
+                        <td>
+                            <a class="view-hotel" (click) = "viewRooms(hotel)">View Rooms</a>
+                        </td>
+                        <td>
+                            <a class="view-hotel" (click) = "viewEmployees(hotel)">View Employees</a>
+                        </td>
+                        
+                        <td>
+                            <button class="delete-hotel" (click)="deleteHotel(hotel)">Delete</button>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </main>
+        </div>
+
+        <div *ngSwitchCase = "'rooms'">
+            <header class="header-container">
+                <h1>
+                    Hotel Rooms
+                    <button class="view-hotel" (click)="goBack()" style="padding: 10px 20px; font-size: 20px;">Go Back</button>
+                </h1>
+                
+              </header>
+              <main>
+                <table>
+                  <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Price Per Night</th>
+                        <th>Amenities</th>
+                        <th>Capacity</th>
+                        <th>Mountain View?</th>
+                        <th>Sea View?</th>
+                        <th>Extendable?</th>
+                        <th>Issues</th>
+                        <th>Delete Room</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor = "let room of roomsOfHotel">
+                    <tr>
+                        <td>{{ room.id }}</td>
+                        <td>{{ room.price }}</td>
+                        <td>{{ room.amenities }}</td>
+                        <td>{{ room.capacity }}</td>
+                        <td>{{ convertBool(room.mountainView) }}</td>
+                        <td>{{ convertBool(room.seaView) }}</td>
+                        <td>{{ convertBool(room.extendable) }}</td>
+                        <td>{{ room.issues }}</td>
+                        <td>
+                            <button class="delete-room" (click)="deleteRoom(room)">Delete</button>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </main>
+        </div>
+
+        <div *ngSwitchCase = "'employees'">
+            <header class="header-container">
+                <h1>
+                    Employees
+                    <button class="view-hotel" (click)="goBack()" style="padding: 10px 20px; font-size: 20px;">Go Back</button>
+                </h1>
+                
+              </header>
+              <main>
+                <table>
+                  <thead>
+                    <tr>
+                        <th>Employee Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Delete?</th>
+
+                    </tr>
+                  </thead>
+                  <tbody *ngFor = "let e of employeesOfHotel">
+                    <tr>
+                        <td>{{ e.id }}</td>
+                        <td>{{ e.firstName }}</td>
+                        <td>{{ e.lastName }}</td>
+                        <td>{{ e.userName }}</td>
+                        <td>{{ e.role }}</td>
+                        <td>
+                            <button class="delete-room"(click)="deleteEmployee(e)">Delete</button>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </main>
+        </div>
+    </div>
+  </body>
+</html>

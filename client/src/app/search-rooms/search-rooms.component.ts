@@ -107,7 +107,6 @@ export class SearchRoomsComponent {
       this.route.queryParams.subscribe(params => {
         const availableRoomsFromQuery = params['availableRooms'];
         if (availableRoomsFromQuery) {
-          alert('Available rooms found from the home page!!');
           this.availableRoomData = availableRoomsFromQuery;
         }
       });
@@ -138,7 +137,7 @@ export class SearchRoomsComponent {
     
     for (let hotel of this.hotels) {
 
-      let address: Address;
+      let address = this.addresses.find(address => address.id === hotel.addressID) as Address;
       this.apiService.getAddressByID(hotel.addressID).subscribe((data: Address) => {
         address = data;
         if (!this.hotelLocations.some(location => location.city === address.city)) {

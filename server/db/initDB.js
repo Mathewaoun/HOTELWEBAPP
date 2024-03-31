@@ -830,6 +830,221 @@ function createAdmin() {
   closeDatabase(db);
 }
 
+function createDummyChain() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const chainAddress = new Address(51, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress1 = new Address(52, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress2 = new Address(53, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const employeeAddress1 = new Address(54, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress2 = new Address(55, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress3 = new Address(56, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress4 = new Address(57, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const firstHotel = new Hotel(26, 6, 4, 2, 51, "fake@gmail.com", "1234567890");
+  const secondHotel = new Hotel(27, 6, 4, 2, 52, "fake@email.com", "0987654321");
+
+  const firstHotelRoom1 = new Room(126, 26, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const firstHotelRoom2 = new Room(127, 26, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const secondHotelRoom1 = new Room(128, 27, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const secondHotelRoom2 = new Room(129, 27, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const firstHotelEmployee1 = new Employee(26, 26, "John", "Doe", "johndoe", "password", 54, "Manager");
+  const firstHotelEmployee2 = new Employee(27, 26, "Jane", "Doe", "janedoe", "password", 55, "Receptionist");
+
+  const secondHotelEmployee1 = new Employee(28, 27, "John", "Smith", "johnsmith", "password", 56, "Manager");
+  const secondHotelEmployee2 = new Employee(29, 27, "Jane", "Smith", "janesmith", "password", 57, "Receptionist");
+
+  const chain = new Chain(6, "Fake Chain", 51, 2, "chain@email.com", ["1234567890"]);
+  
+  for (let a of [chainAddress, hotelAddress1, hotelAddress2, employeeAddress1, employeeAddress2, employeeAddress3, employeeAddress4]) {
+    db.run(`INSERT INTO ${ADDRESS_TABLE}
+                    (${COLUMN_ADDRESS_STREET},
+                      ${COLUMN_ADDRESS_APT},
+                      ${COLUMN_ADDRESS_POSTAL},
+                      ${COLUMN_ADDRESS_PROVINCE},
+                      ${COLUMN_ADDRESS_CITY})
+                      VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting address:', err.message);
+                        } else {
+                            console.log('Address inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  for(let h of [firstHotel, secondHotel]) {
+    db.run(`INSERT INTO ${HOTEL_TABLE}
+                    (${COLUMN_HOTEL_CHAIN_ID},
+                      ${COLUMN_HOTEL_RATING},
+                      ${COLUMN_HOTEL_NUM_ROOMS},
+                      ${COLUMN_HOTEL_ADDRESS_ID},
+                      ${COLUMN_HOTEL_EMAIL},
+                      ${COLUMN_HOTEL_PHONE_NUMBERS})
+                      VALUES (?, ?, ?, ?, ?, ?)`, [h.getChainID(), h.getRating(), h.getNumRooms(), h.getAddressID(), h.getEmail(), h.getPhone()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting hotel:', err.message);
+                        } else {
+                            console.log('Hotel inserted successfully');
+                            // Handle success here if needed
+                        }
+                    }); 
+  }
+
+  for(let r of [firstHotelRoom1, firstHotelRoom2, secondHotelRoom1, secondHotelRoom2]) {
+    db.run(`INSERT INTO ${ROOM_TABLE}
+                    (${COLUMN_ROOM_HOTEL_ID},
+                      ${COLUMN_ROOM_PRICE},
+                      ${COLUMN_ROOM_AMENITIES},
+                      ${COLUMN_ROOM_CAPACITY},
+                      ${COLUMN_ROOM_MOUNTAIN_VIEW},
+                      ${COLUMN_ROOM_SEA_VIEW},
+                      ${COLUMN_ROOM_EXTENDABLE},
+                      ${COLUMN_ROOM_ISSUES})
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [r.getHotelId(), r.getPrice(), r.getAmenities(), r.getCapacity(), r.getMountainView(), r.getSeaView(), r.getExtendable(), r.getIssues()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting room:', err.message);
+                        } else {
+                            console.log('Room inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  for(let e of [firstHotelEmployee1, firstHotelEmployee2, secondHotelEmployee1, secondHotelEmployee2]) {
+    db.run(`INSERT INTO ${EMPLOYEE_TABLE}
+                    (${COLUMN_EMPLOYEE_HOTEL_ID},
+                      ${COLUMN_EMPLOYEE_FIRST_NAME},
+                      ${COLUMN_EMPLOYEE_LAST_NAME},
+                      ${COLUMN_EMPLOYEE_USERNAME},
+                      ${COLUMN_EMPLOYEE_PASSWORD},
+                      ${COLUMN_EMPLOYEE_ADDRESS_ID},
+                      ${COLUMN_EMPLOYEE_ROLE})
+                      VALUES (?, ?, ?, ?, ?, ?, ?)`, [e.getHotelId(), e.getFirstName(), e.getLastName(), e.getUserName(), e.getPassword(), e.getAddressId(), e.getRole()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting employee:', err.message);
+                        } else {
+                            console.log('Employee inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  const phoneNumbers = chain.getPhoneNumbers();
+    //set phone numbers to be a string of the array
+  chain.setPhoneNumbers(phoneNumbers.join(', '));
+
+  db.run(`INSERT INTO ${CHAIN_TABLE}
+                    (${COLUMN_CHAIN_ADDRESS_ID},
+                      ${COLUMN_CHAIN_NAME},
+                      ${COLUMN_CHAIN_NUM_LOCATIONS},
+                      ${COLUMN_CHAIN_EMAIL},
+                      ${COLUMN_CHAIN_PHONE_NUMBERS})
+                      VALUES (?, ?, ?, ?, ?)`, [chain.getAddressId(), chain.getName(), chain.getNumLocations(), chain.getEmail(), chain.getPhoneNumbers()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting chain:', err.message);
+                        } else {
+                            console.log('Chain inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+
+  closeDatabase(db);                    
+}
+
+function deleteDummyChain() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const chainAddress = new Address(83, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress1 = new Address(84, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress2 = new Address(85, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const employeeAddress1 = new Address(86, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress2 = new Address(87, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress3 = new Address(88, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress4 = new Address(89, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const firstHotel = new Hotel(26, 6, 4, 2, 83, "fake@gmail.com", "1234567890");
+  const secondHotel = new Hotel(27, 6, 4, 2, 84, "fake@email.com", "0987654321");
+
+  const firstHotelRoom1 = new Room(126, 26, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const firstHotelRoom2 = new Room(127, 26, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const secondHotelRoom1 = new Room(128, 27, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const secondHotelRoom2 = new Room(129, 27, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const firstHotelEmployee1 = new Employee(26, 26, "John", "Doe", "johndoe", "password", 86, "Manager");
+  const firstHotelEmployee2 = new Employee(27, 26, "Jane", "Doe", "janedoe", "password", 87, "Receptionist");
+
+  const secondHotelEmployee1 = new Employee(28, 27, "John", "Smith", "johnsmith", "password", 88, "Manager");
+  const secondHotelEmployee2 = new Employee(29, 27, "Jane", "Smith", "janesmith", "password", 89, "Receptionist");
+
+  for(const a in [chainAddress, hotelAddress1, hotelAddress2, employeeAddress1, employeeAddress2, employeeAddress3, employeeAddress4]) {
+    db.run(`DELETE FROM ${ADDRESS_TABLE} WHERE ${COLUMN_ADDRESS_ID} = ?`, [a], function(err) {
+      if (err) {
+        console.error('Error deleting address:', err.message);
+      } else {
+        console.log('Address deleted successfully');
+      }
+    });
+  }
+
+  for(const h in [firstHotel, secondHotel]) {
+    db.run(`DELETE FROM ${HOTEL_TABLE} WHERE ${COLUMN_HOTEL_ID} = ?`, [h], function(err) {
+      if (err) {
+        console.error('Error deleting hotel:', err.message);
+      } else {
+        console.log('Hotel deleted successfully');
+      }
+    });
+  }
+
+  for(const r in [firstHotelRoom1, firstHotelRoom2, secondHotelRoom1, secondHotelRoom2]) {
+    db.run(`DELETE FROM ${ROOM_TABLE} WHERE ${COLUMN_ROOM_ID} = ?`, [r], function(err) {
+      if (err) {
+        console.error('Error deleting room:', err.message);
+      } else {
+        console.log('Room deleted successfully');
+      }
+    });
+  }
+
+  for(const e in [firstHotelEmployee1, firstHotelEmployee2, secondHotelEmployee1, secondHotelEmployee2]) {
+    db.run(`DELETE FROM ${EMPLOYEE_TABLE} WHERE ${COLUMN_EMPLOYEE_ID} = ?`, [e], function(err) {
+      if (err) {
+        console.error('Error deleting employee:', err.message);
+      } else {
+        console.log('Employee deleted successfully');
+      }
+    });
+  }
+
+  closeDatabase(db);
+
+}
+
 function closeDatabase(db) {
   db.close((err) => {
     if (err) {
@@ -840,11 +1055,22 @@ function closeDatabase(db) {
   });
 }
 
+function createEntireDatabase() {
+  //createDatabase();
+  //populateDatabase();
+  //createAdmin();
+  //populateRooms();
+  //createDummyChain();
+}
+
 module.exports = {
   createDatabase: createDatabase,
   populateDatabase: populateDatabase,
   closeDatabase: closeDatabase, 
   createAdmin: createAdmin,
-  populateRooms: populateRooms
+  populateRooms: populateRooms,
+  createDummyChain: createDummyChain,
+  deleteDummyChain: deleteDummyChain,
+  createEntireDatabase: createEntireDatabase
 };
 

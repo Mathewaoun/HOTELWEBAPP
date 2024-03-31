@@ -49,6 +49,10 @@ const { getArchive,
     insertAddress,
     insertBooking,
     insertArchive,
+    deleteChain,
+    deleteHotel,
+    deleteRoom,
+    deleteEmployee,
     closeDatabase
 } = require('../utils/db');
 
@@ -382,9 +386,46 @@ router.get('/archiveByCustomerID/:customerID', (req, res) => {
 });
 
 // get an address by the address id
+// get an address by the address id
 router.get('/address/:id', (req, res) => {
     getAddressByID(req.params.id).then(address => {
         res.json(address);
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a chain by their id
+router.delete('/deleteChain/:id', (req, res) => {
+    deleteChain(req.params.id).then(() => {
+        res.json({ message: 'Chain deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a hotel by their id
+router.delete('/deleteHotel/:id', (req, res) => {
+    deleteHotel(req.params.id).then(() => {
+        res.json({ message: 'Hotel deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a room by their id
+router.delete('/deleteRoom/:id', (req, res) => {
+    deleteRoom(req.params.id).then(() => {
+        res.json({ message: 'Room deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete an employee by their id
+router.delete('/deleteEmployee/:id', (req, res) => {
+    deleteEmployee(req.params.id).then(() => {
+        res.json({ message: 'Employee deleted' });
     }).catch(error => {
         res.status(500).json({ error: error.message });
     });

@@ -1,9 +1,11 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ApiService } from '../api-service.service';
 import { forkJoin } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoggedInUserService } from '../logged-in-user.service';
+import { Subscription } from 'rxjs';
 
 import Customer from '../../../../server/models/Customer';
 import Address from '../../../../server/models/Address';
@@ -18,6 +20,7 @@ import Address from '../../../../server/models/Address';
 export class CustomerSignupComponent {
 
   signupForm: FormGroup;
+  subscription: Subscription = new Subscription;
   apiService: ApiService;
   customer!: Customer;
   address!: Address;
@@ -37,7 +40,7 @@ export class CustomerSignupComponent {
 
 
 
-  constructor(private router: Router, private fb: FormBuilder, apiService: ApiService) {
+  constructor(private loggedInUserService: LoggedInUserService, private router: Router, private fb: FormBuilder, apiService: ApiService) {
     this.apiService = apiService;
     this.signupForm = this.fb.group({
       identification: [''],
@@ -151,9 +154,9 @@ export class CustomerSignupComponent {
   }
 
   validatePassword(password: string) : boolean {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()]{8,}$/;
     if (!passwordRegex.test(password)) {
-      alert('Password must be at least 8 characters long and contain at least one letter and one number.');
+      alert('Password must be at least 8 characters long and contain at least one letter and one number.' + password);
       return false;
     }
     return true;
@@ -226,23 +229,28 @@ export class CustomerSignupComponent {
         }
       }
 
-      if(billingFound && homeFound) { 
-        this.customer = new Customer(-1, id, fname, lname, email, password, this.address.id, this.billingAddress.id, cardHolderName, cardNumber, cardExpiry, cardCVV);
-        forkJoin({
-          customer: this.apiService.createCustomer(this.customer)
-        }).subscribe(({ customer }) => {
-          console.log("Customer: " + customer);
-        });
-      } else {
+      if(!(billingFound && homeFound)) {
         alert('Error creating address. Address ID: ' + this.address.id + ' Billing ID: ' + this.billingAddress.id);
         return;
       }
 
     });
 
+    if(this.address.id !== 1 && this.billingAddress.id !== 1) {
+      this.customer = new Customer(-1, id, fname, lname, email, password, this.address, this.billingAddress, cardHolderName, cardNumber, cardExpiry, cardCVV);
+      forkJoin({
+        customer: this.apiService.createCustomer(this.customer)
+      }).subscribe(({ customer }) => {
+        console.log("Customer: " + customer);
+      });
+
+      this.loggedInUserService.setLoggedInCustomer(this.customer);
+    }
     
   }
 
-
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
 
