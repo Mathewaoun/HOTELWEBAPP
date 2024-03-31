@@ -6,8 +6,11 @@ import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoggedInUserService } from '../logged-in-user.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
 
 import Customer from '../../../../server/models/Customer';
+import Room from '../../../../server/models/Room';
 
 @Component({
   selector: 'app-customer-login',
@@ -22,8 +25,9 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
   loginForm: FormGroup;
   apiService: ApiService;
   customers: Customer[] = [];
+  availableRoomsFromQuery: Room[] = [];
 
-  constructor(private loggedInUserService: LoggedInUserService, private fb: FormBuilder, apiService: ApiService, private router: Router) {
+  constructor(private route: ActivatedRoute, private loggedInUserService: LoggedInUserService, private fb: FormBuilder, apiService: ApiService, private router: Router) {
     this.apiService = apiService;
     this.loginForm = this.fb.group({
       email: [''],
@@ -32,6 +36,13 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const availableRoomsFromQuery = params['availableRooms'];
+      if (availableRoomsFromQuery) {
+        this.availableRoomsFromQuery = availableRoomsFromQuery;
+      }
+    });
+
     forkJoin({
       customers: this.apiService.getCustomers()
     
@@ -46,7 +57,11 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
       alert('Customer logged in');
       this.loggedInUserService.setLoggedInCustomer(customer);
       
-      this.router.navigate(['/search-rooms']);
+      if(this.availableRoomsFromQuery) {
+        this.router.navigate(['/search-rooms'], { queryParams: { availableRooms: this.availableRoomsFromQuery } });
+      } else {
+        this.router.navigate(['/search-rooms']);
+      }
     } else {
       alert('Invalid username or password. Please try again.');
     }

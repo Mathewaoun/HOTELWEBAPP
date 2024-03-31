@@ -43,11 +43,11 @@
             </div>
             <div class="form-section">
                 <div class="input-wrapper">
-                <select formControlName = "hotelChain" id="hotel-chain" name="hotel-chain"required>
-                    <option value="" disabled selected>Select Hotel Chain</option>
-                    <option *ngFor="let chain of chains">{{ chain.name }}</option>
-                    <option value="any">Any</option>
-                </select>
+                    <select formControlName = "hotelChain" id="hotel-chain" name="hotel-chain"required>
+                        <option value="" disabled selected>Select Hotel Chain</option>
+                        <option *ngFor="let chain of chains">{{ chain.name }}</option>
+                        <option value="any">Any</option>
+                    </select>
                 </div>
                 <p>Hotel Chain</p>
             </div>

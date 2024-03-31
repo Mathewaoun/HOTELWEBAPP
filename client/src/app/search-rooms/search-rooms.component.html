@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Your Hotel</title>
+  </head>
+  <body>
+    <form [formGroup] = "searchForm">
+      <div class="search-menu">
+        <select formControlName = "location" id="location" name="location" required>
+          <option value="" disabled selected>Select Location</option>
+          <option *ngFor="let location of hotelLocations">{{ location.city }}</option>
+          <option value="any">Any</option>
+        </select>
+        <input type="date" id="checkin" name="checkInDate" formControlName = "checkInDate" required>
+        <input type="date" id="checkout" name="checkOutDate" formControlName = "checkOutDate" required>
+        <input type = "number" formControlName = "roomCapacity" type="number" id="roomCapacity" name="roomCapacity" min = 1 placeholder="Room Capacity" required>
+        <div class="guests-dropdown">
+          <select formControlName = "hotelChain" id="hotel-chain" name="hotelChain"required>
+            <option value="" disabled selected>Select Hotel Chain</option>
+            <option *ngFor="let chain of chains">{{ chain.name }}</option>
+            <option value="any">Any</option>
+          </select>
+        </div>
+
+        <div class="star-rating">
+          <input type="radio" id="5-stars" name="ratingControl" value="5" formControlName="ratingControl" required>
+          <label for="5-stars" class="star">&#9733;</label>
+
+          <input type="radio" id="4-stars" name="ratingControl" value="4" formControlName="ratingControl">
+          <label for="4-stars" class="star">&#9733;</label>
+
+          <input type="radio" id="3-stars" name="ratingControl" value="3" formControlName="ratingControl">
+          <label for="3-stars" class="star">&#9733;</label>
+
+          <input type="radio" id="2-stars" name="ratingControl" value="2" formControlName="ratingControl">
+          <label for="2-stars" class="star">&#9733;</label>
+
+          <input type="radio" id="1-star" name="ratingControl" value="1" formControlName="ratingControl">
+          <label for="1-star" class="star">&#9733;</label>
+        </div>
+        <button id="search-btn" type="submit" class="search-btn" (click) = "validateSearch()">Search</button>
+      </div>
+    </form>
+
+    <main class="main-content">
+      <section class="hotel-selection">
+        <h1>Sort by: </h1>
+        <div class="sort-options" [formGroup] = "filterForm">
+          <select formControlName = "sortOption" id = "sort-option" name="sortOption">
+            <option value="alphabetical">Alphabetical</option>
+            <option value="priceLowToHigh">Price Low to High</option>
+            <option value="priceHighToLow">Price High to Low</option>
+            <option value="ratingHighToLow">Rating High to Low</option>
+            <option value="ratingLowToHigh">Rating Low to High</option>
+            <option value="mountainView">Mountain View</option>
+            <option value="seaView">Sea View</option>
+            <option value="extendable">Extendable</option>
+          </select>
+          <button id="search-btn" type="submit" class="search-btn" (click) = "filterRooms()">Filter</button>
+        </div>
+
+        <div class="hotel-option" *ngFor = "let room of availableRoomData">
+          <div class="hotel-details">
+            <h2>{{ room.chainName }} {{ room.roomRating}}</h2>
+            <p>Room Number: {{ room.id }}</p>
+            <p>{{ room.address }} | Capacity: {{ room.capacity }}</p>
+            <p>Amenities: {{ room.amenities }}</p>
+            <p>Mountain View: {{ room.mountainView }}</p>
+            <p>Sea View: {{ room.seaView }}</p>
+            <p>Extendable: {{ room.extendable }}</p>
+          </div>
+          <div class="hotel-booking">
+            <p class="price">${{ room.price }}</p>
+            <a class="select-button">Book</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2024 MFD Hotels. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

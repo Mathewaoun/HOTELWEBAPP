@@ -2,24 +2,60 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '.././api-service.service';
-
+import { ActivatedRoute } from '@angular/router';
+import Customer from '../../../../server/models/Customer';
+import Archive from '../../../../server/models/Archive';
 import Address from '../../../../server/models/Address';
 import Booking from '../../../../server/models/Booking';
 import Room from '../../../../server/models/Room';
 import Hotel from '../../../../server/models/Hotel';
 import Chain from '../../../../server/models/Chain';
+import Employee from '../../../../server/models/Employee';
 
 import { CommonModule } from '@angular/common';
 import { Observable, forkJoin } from 'rxjs';
 
+
+export class RoomData {
+  id: number;
+  price: number;
+  capacity: number;
+  chainName: string;
+  roomRating: string;
+  address: string;
+  amenities: string;
+  mountainView: string;
+  seaView: string;
+  extendable: string;
+
+  constructor(id: number, price: number, capacity: number, chainName: string, roomRating: string, address: string, amenities: string, mountainView: boolean, seaView: boolean, extendable: boolean) {
+    this.id = id;
+    this.price = price;
+    this.capacity = capacity;
+    this.chainName = chainName;
+    this.roomRating = roomRating;
+    this.address = address;
+    this.amenities = '';
+    
+    this.amenities = amenities;
+    this.mountainView = mountainView ? 'Yes' : 'No';
+    this.seaView = seaView ? 'Yes' : 'No';
+    this.extendable = extendable ? 'Yes' : 'No';
+  }
+}
+
+
 @Component({
-  selector: 'app-home',
+  selector: 'app-search-rooms',
   standalone: true,
   imports: [RouterModule, CommonModule, ReactiveFormsModule],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './search-rooms.component.html',
+  styleUrl: './search-rooms.component.css'
 })
-export class HomeComponent {
+export class SearchRoomsComponent {
+  searchForm: FormGroup;
+  filterForm: FormGroup;
+  apiService: ApiService;
 
   chains: Chain[] = [];
   hotels: Hotel[] = [];
@@ -27,11 +63,11 @@ export class HomeComponent {
   addresses: Address[] = [];
   hotelLocations: Address[] = [];
   bookings: Booking[] = [];
-  
-  searchForm: FormGroup;
-  apiService: ApiService;
+  available: Room[] = [];
+  allRoomData: RoomData[] = [];
+  availableRoomData: RoomData[] = [];
 
-  constructor(private fb: FormBuilder,apiService: ApiService, private router: Router) {
+  constructor(private route: ActivatedRoute, private fb: FormBuilder,apiService: ApiService, private router: Router) {
     this.apiService = apiService;
     this.searchForm = this.fb.group({
       location: [''],
@@ -41,9 +77,15 @@ export class HomeComponent {
       hotelChain: [''],
       ratingControl: ['']
     });
+
+    this.filterForm = this.fb.group({
+      sortOption: [''],
+    });
   }
 
   ngOnInit() {
+
+    
     // getting all chains, hotels, addresses, rooms, and bookings and ensuring all asynchronous functions are completed before proceeding
     forkJoin({
       chains: this.apiService.getChains(),
@@ -59,9 +101,33 @@ export class HomeComponent {
       this.rooms = rooms;
       this.bookings = bookings;
 
-      // getting all unique cities that hotels exist within
       this.getHotelLocations();
+      this.getAllRoomData();
+      
+      this.route.queryParams.subscribe(params => {
+        const availableRoomsFromQuery = params['availableRooms'];
+        if (availableRoomsFromQuery) {
+          alert('Available rooms found from the home page!!');
+          this.availableRoomData = availableRoomsFromQuery;
+        }
+      });
+
     });
+  }
+
+  getAllRoomData(): void {
+    for (let room of this.rooms) {
+      let hotel = this.hotels.find(hotel => hotel.id === room.hotelId);
+      let address = this.addresses.find(address => address.id === hotel?.addressID);
+      let chain = this.chains.find(chain => chain.id === hotel?.chainID);
+      let rating = hotel ? hotel.rating : 0;
+      let roomRating = '';
+      for (let i = 0; i < rating; i++) {
+        roomRating += '⭐';
+      }
+      let roomData = new RoomData(room.id, room.price, room.capacity, chain?.name || '', roomRating, address?.city || '', room.amenities, room.mountainView, room.seaView, room.extendable);
+      this.allRoomData.push(roomData);
+    }
   }
 
   getHotelByRating(rating: number): Hotel[] { 
@@ -163,14 +229,15 @@ export class HomeComponent {
   }
 
   validateSearch(): void {
+    console.log("Search button clicked");
     this.validateDates();
     this.validateCapacity();
 
     if (this.searchForm.valid) {
       const formValues = this.searchForm.value;
-      let available = this.findAvailableRooms(formValues.location, formValues.checkInDate, formValues.checkOutDate, formValues.roomCapacity, formValues.hotelChain, formValues.ratingControl);
-      if(available.length > 0) {
-        this.router.navigate(['/customer-login'], { queryParams: { available } });
+      this.available = this.findAvailableRooms(formValues.location, formValues.checkInDate, formValues.checkOutDate, formValues.roomCapacity, formValues.hotelChain, formValues.ratingControl);
+      if(this.available.length > 0) {
+        this.formatRooms();
       } else {
         alert('No available rooms found');
       }
@@ -207,4 +274,44 @@ export class HomeComponent {
       }
     }
   }
+
+  formatRooms(): void {
+
+    // for every room in this.available, push the RoomData object to this.availableRoomData from this.allRoomData
+    this.availableRoomData = [];
+    for (let room of this.available) {
+      let roomData = this.allRoomData.find(roomData => roomData.id === room.id);
+      if (roomData) {
+        this.availableRoomData.push(roomData);
+      }
+    }
+  
+  }
+
+  filterRooms(): void {
+    const sortOption = this.filterForm.get('sortOption')?.value;
+    if (sortOption === 'alphabetical') {
+      this.validateSearch();
+      this.availableRoomData.sort((a, b) => a.address.localeCompare(b.address));
+    } else if (sortOption === 'priceLowToHigh') {
+      this.validateSearch();
+      this.availableRoomData.sort((a, b) => a.price - b.price);
+    } else if (sortOption === 'priceHighToLow') {
+      this.validateSearch();
+      this.availableRoomData.sort((a, b) => b.price - a.price);
+    } else if (sortOption === 'ratingLowToHigh') {
+      this.validateSearch();
+      this.availableRoomData.sort((a, b) => a.roomRating.length - b.roomRating.length);
+    } else if (sortOption === 'ratingHighToLow') {
+      this.validateSearch();
+      this.availableRoomData.sort((a, b) => b.roomRating.length - a.roomRating.length);
+    } else if (sortOption === 'mountainView') {
+      this.availableRoomData = this.availableRoomData.filter(room => room.mountainView === 'Yes');
+    } else if (sortOption === 'seaView') {
+      this.availableRoomData = this.availableRoomData.filter(room => room.seaView === 'Yes');
+    } else if (sortOption === 'extendable') {
+      this.availableRoomData = this.availableRoomData.filter(room => room.extendable === 'Yes');
+    }
+  }
+
 }
