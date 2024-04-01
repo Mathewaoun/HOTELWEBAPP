@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import Customer from '../../../../server/models/Customer';
 import Room from '../../../../server/models/Room';
+import { RoomData } from '../search-rooms/search-rooms.component';
 
 @Component({
   selector: 'app-customer-login',
@@ -26,6 +27,8 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
   apiService: ApiService;
   customers: Customer[] = [];
   availableRoomsFromQuery: Room[] = [];
+  roomData: RoomData[] = [];
+  employeeID: number = 0;
 
   constructor(private route: ActivatedRoute, private loggedInUserService: LoggedInUserService, private fb: FormBuilder, apiService: ApiService, private router: Router) {
     this.apiService = apiService;
@@ -43,6 +46,12 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
       }
     });
 
+    this.route.queryParams.subscribe(params => {
+      this.roomData = JSON.parse(params['room']);
+      this.employeeID = JSON.parse(params['id']);
+    });
+
+    
     forkJoin({
       customers: this.apiService.getCustomers()
     
@@ -53,7 +62,7 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
 
   loginCustomer(email: string, password: string) {
     let customer = this.customers.find(customer => customer.email === email);
-    if (customer && customer.password === password) {
+    if ((this.employeeID === 0) && customer && customer.password === password) {
       alert('Customer logged in');
       this.loggedInUserService.setLoggedInCustomer(customer);
       
@@ -62,9 +71,10 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
       } else {
         this.router.navigate(['/customer-landing']);
       }
-    } else {
-      alert('Invalid username or password. Please try again.');
+    } else if((this.employeeID !== 0) && customer && customer.password === password) {
+      this.router.navigate(['/create-booking'], { queryParams: { room: JSON.stringify(this.roomData), id: JSON.stringify(this.employeeID), name : JSON.stringify(customer.firstName + ' ' + customer.lastName) } });
     }
+
   }
 
   validateLogin() : void {

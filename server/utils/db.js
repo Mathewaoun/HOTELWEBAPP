@@ -1018,6 +1018,18 @@ async function deleteEmployee(id) {
   closeDatabase(db);
 }
 
+async function deleteBooking(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM BOOKING_TABLE WHERE COLUMN_BOOKING_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting booking:', err);
+    } else {
+      console.log('Booking deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
 function closeDatabase(db) {
     db.close((err) => {
       if (err) {
@@ -1070,5 +1082,6 @@ module.exports = {
     deleteHotel,
     deleteRoom,
     deleteEmployee,
+    deleteBooking,
     closeDatabase
 };

@@ -58,6 +58,16 @@ export class HomeComponent {
       this.addresses = addresses;
       this.rooms = rooms;
       this.bookings = bookings;
+  
+      //create an instance of date for the current date in the format of yyyy-dd-mm
+      let currentDate = new Date();
+      let formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+  
+      for(const b of this.bookings) {
+        if(b.checkOutDate < formattedDate) {
+          this.apiService.deleteBooking(b.id);
+        }
+      }
 
       // getting all unique cities that hotels exist within
       this.getHotelLocations();

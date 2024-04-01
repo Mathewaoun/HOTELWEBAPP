@@ -91,14 +91,14 @@ export class EmployeePortalComponent {
       this.customers = customers;
       this.employees = employees;
       
-      let employee = new Employee();
       this.loggedInUserService.getLoggedInEmployee().subscribe(e => {
-        employee = e;
-        if(employee.userName === 'admin') {
+        this.currentEmployee = e;
+        if(this.currentEmployee.userName === 'admin') {
             this.router.navigate(['/admin']);
         }
       });
 
+      let employee = this.currentEmployee;
       const hotel = employee ? this.hotels.find(hotel => hotel.id === employee.hotelId) : null;
       const hotelRooms = hotel ? this.rooms.filter(room => room.hotelId === hotel.id) : [];
       const hotelBookings = hotelRooms ? this.bookings.filter(booking => hotelRooms.some(room => room.id === booking.roomId)) : [];
@@ -141,6 +141,10 @@ export class EmployeePortalComponent {
   
   logout() {
     this.router.navigate(['/employee-login']);
+  }
+
+  bookRoom() {
+    this.router.navigate(['/search-rooms'], { queryParams: { employeeID: JSON.stringify(this.currentEmployee.id) } });
   }
 
   ngOnDestroy() {

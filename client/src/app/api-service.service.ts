@@ -180,6 +180,10 @@ export class ApiService {
     return this.http.delete<Employee>(`${this.baseUrl}/deleteEmployee/${employee.id}`);
   }
 
+  deleteBooking(booking: Booking): Observable<Booking> {
+    return this.http.delete<Booking>(`${this.baseUrl}/deleteBooking/${booking.id}`);
+  }
+
 
 
 }

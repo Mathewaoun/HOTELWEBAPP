@@ -28,6 +28,7 @@ export class CreateBookingComponent {
   customerName: string = '';
   customer: Customer = new Customer('','','','','','','','','','','','');
   apiService: ApiService;
+  employeeID: number = 0;
 
   constructor(private loggedInUserService: LoggedInUserService, private route: ActivatedRoute, apiService: ApiService, private router: Router) {
     this.apiService = apiService;
@@ -39,12 +40,17 @@ export class CreateBookingComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.roomData = JSON.parse(params['room']);
-
+      this.customerName = JSON.parse(params['name']);
+      this.employeeID = JSON.parse(params['id']);
     });
 
-    this.loggedInUserService.getLoggedInCustomer().subscribe(customer => {
-      this.customerName = customer.firstName + ' ' + customer.lastName;
-    });
+    if(this.employeeID === 0) {
+      this.loggedInUserService.getLoggedInCustomer().subscribe(customer => {
+        this.customerName = customer.firstName + ' ' + customer.lastName;
+      });
+    } else {
+
+    }
 
     const checkOutDate = new Date(this.roomData.checkOutDate);
     const checkInDate = new Date(this.roomData.checkInDate);
@@ -64,8 +70,9 @@ export class CreateBookingComponent {
     //create an instance of date for the current date in the format of yyyy-dd-mm
     let currentDate = new Date();
     let formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    let id = (this.employeeID === 0) ? null : this.employeeID
   
-    let booking = new Booking(-1, this.customer.id, null, this.roomData.id, null, formattedDate, this.customerName, this.roomData.checkInDate, this.roomData.checkOutDate, this.roomData.capacity, false, true);
+    let booking = new Booking(-1, this.customer.id, id, this.roomData.id, null, formattedDate, this.customerName, this.roomData.checkInDate, this.roomData.checkOutDate, this.roomData.capacity, false, true);
     let archive = new Archive(-1, this.customer.firstName, this.customer.lastName, this.roomData.id, this.roomData.checkInDate, this.roomData.checkOutDate, formattedDate);
     forkJoin({
       booking: this.apiService.createBooking(booking),
@@ -73,8 +80,12 @@ export class CreateBookingComponent {
     }).subscribe(data => {
       console.log('Booking created');
     });
-    
-    this.router.navigate(['customer-landing']);
+
+    if(this.employeeID === 0) {
+      this.router.navigate(['customer-landing']);
+    } else {
+      this.router.navigate(['employee-portal']);
+    }
   }
 
   goBack() {

@@ -13,7 +13,8 @@ import Chain from '../../../../server/models/Chain';
 import Employee from '../../../../server/models/Employee';
 
 import { CommonModule } from '@angular/common';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
+import { LoggedInUserService } from '../logged-in-user.service';
 
 
 export class RoomData {
@@ -72,6 +73,8 @@ export class RoomData {
   styleUrl: './search-rooms.component.css'
 })
 export class SearchRoomsComponent {
+
+  subscription: Subscription = new Subscription;
   searchForm: FormGroup;
   filterForm: FormGroup;
   apiService: ApiService;
@@ -85,11 +88,12 @@ export class SearchRoomsComponent {
   available: Room[] = [];
   allRoomData: RoomData[] = [];
   availableRoomData: RoomData[] = [];
+  employeeID: number = 0;
 
   checkInDate: string = '';
   checkOutDate: string = '';
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder,apiService: ApiService, private router: Router) {
+  constructor(private loggedInUserService: LoggedInUserService,private route: ActivatedRoute, private fb: FormBuilder,apiService: ApiService, private router: Router) {
     this.apiService = apiService;
     this.searchForm = this.fb.group({
       location: [''],
@@ -107,7 +111,9 @@ export class SearchRoomsComponent {
 
   ngOnInit() {
 
-    
+    this.route.queryParams.subscribe(params => {
+      this.employeeID = JSON.parse(params['employeeID']);
+    });
     // getting all chains, hotels, addresses, rooms, and bookings and ensuring all asynchronous functions are completed before proceeding
     forkJoin({
       chains: this.apiService.getChains(),
@@ -344,7 +350,11 @@ export class SearchRoomsComponent {
 
   bookRoom(room: RoomData): void {
     room.setDates(this.checkInDate, this.checkOutDate);
-    this.router.navigate(['create-booking'], { queryParams: { room: JSON.stringify(room) } });
+    if (this.loggedInUserService.isEmployeeLoggedIn()) {
+      this.router.navigate(['/customer-login'], { queryParams: { room: JSON.stringify(room), id : JSON.stringify(this.employeeID) } });
+    } else {
+      this.router.navigate(['create-booking'], { queryParams: { room: JSON.stringify(room) } });
+    }
   }
 
 }

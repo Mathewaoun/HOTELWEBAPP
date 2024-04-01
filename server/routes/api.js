@@ -53,6 +53,7 @@ const { getArchive,
     deleteHotel,
     deleteRoom,
     deleteEmployee,
+    deleteBooking,
     closeDatabase
 } = require('../utils/db');
 
@@ -436,6 +437,14 @@ router.delete('/deleteRoom/:id', (req, res) => {
 router.delete('/deleteEmployee/:id', (req, res) => {
     deleteEmployee(req.params.id).then(() => {
         res.json({ message: 'Employee deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+router.delete('/deleteBooking/:id', (req, res) => {
+    deleteBooking(req.params.id).then(() => {
+        res.json({ message: 'Chain deleted' });
     }).catch(error => {
         res.status(500).json({ error: error.message });
     });
