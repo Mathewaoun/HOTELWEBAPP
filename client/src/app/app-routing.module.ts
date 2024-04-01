@@ -11,6 +11,7 @@ import { ContactComponent } from './contact/contact.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { CustomerLandingComponent } from './customer-landing/customer-landing.component';
+import { CustomerBookingsComponent } from './customer-bookings/customer-bookings.component';
 
 
 export const routes: Routes = [
@@ -25,7 +26,8 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent},
   { path: 'confirmation', component: ConfirmationComponent},
   { path: 'search-rooms', component: SearchRoomsComponent},
-  { path: 'customer-landing', component: CustomerLandingComponent}
+  { path: 'customer-landing', component: CustomerLandingComponent},
+  { path: 'customer-bookings', component: CustomerBookingsComponent}
 
   // Add more routes as needed
 ];

@@ -18,6 +18,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { PaymentComponent } from './payment/payment.component';
 import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { CustomerLandingComponent } from './customer-landing/customer-landing.component';
+import { CustomerBookingsComponent } from './customer-bookings/customer-bookings.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CustomerLandingComponent } from './customer-landing/customer-landing.co
     HomeComponent,
     PaymentComponent,
     SearchRoomsComponent,
-    CustomerLandingComponent
+    CustomerLandingComponent,
+    CustomerBookingsComponent
   ],
   imports: [
     CommonModule,

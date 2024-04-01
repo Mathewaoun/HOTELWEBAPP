@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome {{ customer.firstName }}</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome <span id="customerName">{{ customer.firstName }}</span>!</h1>
+    </header>
+    <main>
+        <div class="button-container">
+            <button class="view-booking-btn" (click) = "viewBookings()">View Bookings</button>
+            <button class="new-booking-btn" >New Booking</button>
+        </div>
+    </main>
+</body>
+</html>
