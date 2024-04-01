@@ -43,6 +43,7 @@ export class CustomerLandingComponent implements OnInit {
   }
 
   createNewBooking() {
+    this.router.navigate(['search-rooms']);
   }
 
   viewBookings() {

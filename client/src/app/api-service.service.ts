@@ -160,6 +160,10 @@ export class ApiService {
     return this.http.post<Booking>(`${this.baseUrl}/createBooking`, booking);
   }
 
+  createArchive(archive: Archive): Observable<Archive> {
+    return this.http.post<Archive>(`${this.baseUrl}/createArchive`, archive);
+  }
+
   deleteChain(chain: Chain): Observable<Chain> {
     return this.http.delete<Chain>(`${this.baseUrl}/deleteChain/${chain.id}`);
   }

@@ -27,6 +27,8 @@ export class RoomData {
   mountainView: string;
   seaView: string;
   extendable: string;
+  checkInDate: string = '';
+  checkOutDate: string = '';
 
   constructor(id: number, price: number, capacity: number, chainName: string, roomRating: string, address: string, amenities: string, mountainView: boolean, seaView: boolean, extendable: boolean) {
     this.id = id;
@@ -41,6 +43,23 @@ export class RoomData {
     this.mountainView = mountainView ? 'Yes' : 'No';
     this.seaView = seaView ? 'Yes' : 'No';
     this.extendable = extendable ? 'Yes' : 'No';
+  }
+
+  setDates(checkInDate: string, checkOutDate: string) {
+    this.checkInDate = checkInDate;
+    this.checkOutDate = checkOutDate;
+  }
+
+  getDates(): string {
+    return `${this.checkInDate} - ${this.checkOutDate}`;
+  }
+
+  getCheckInDate(): string {
+    return this.checkInDate;
+  }
+
+  getCheckOutDate(): string {
+    return this.checkOutDate;
   }
 }
 
@@ -66,6 +85,9 @@ export class SearchRoomsComponent {
   available: Room[] = [];
   allRoomData: RoomData[] = [];
   availableRoomData: RoomData[] = [];
+
+  checkInDate: string = '';
+  checkOutDate: string = '';
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder,apiService: ApiService, private router: Router) {
     this.apiService = apiService;
@@ -158,6 +180,9 @@ export class SearchRoomsComponent {
 
   findAvailableRooms(location: string, checkInDate: string, checkOutDate: string, roomCapacity: number, hotelChain: string, rating: number): Room[] {
 
+    this.checkInDate = checkInDate;
+    this.checkOutDate = checkOutDate;
+
     let hotelOptions: Hotel[] = [];
     let roomOptions: Room[] = []; 
     let availableRooms: Room[] = [];
@@ -202,6 +227,10 @@ export class SearchRoomsComponent {
       for(const b of this.bookings) {
         if(!available) {
           break;
+        }
+
+        if(b.roomId !== r.id) {
+          continue;
         }
 
         let desiredCheckIn = this.convertStringToDate(checkInDate);
@@ -311,6 +340,11 @@ export class SearchRoomsComponent {
     } else if (sortOption === 'extendable') {
       this.availableRoomData = this.availableRoomData.filter(room => room.extendable === 'Yes');
     }
+  }
+
+  bookRoom(room: RoomData): void {
+    room.setDates(this.checkInDate, this.checkOutDate);
+    this.router.navigate(['create-booking'], { queryParams: { room: JSON.stringify(room) } });
   }
 
 }

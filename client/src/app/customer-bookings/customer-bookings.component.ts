@@ -61,22 +61,19 @@ export class CustomerBookingsComponent {
 
   ngOnInit() {
     forkJoin({
-      customer: this.loggedInUserService.getLoggedInCustomer(),
       bookings: this.apiService.getBookings(),
       hotels: this.apiService.getHotels(),
       rooms: this.apiService.getRooms(),
       chains: this.apiService.getChains(),
       addresses: this.apiService.getAddresses()
-    }).subscribe(({ customer, bookings, hotels, rooms, chains, addresses }) => {
-      if (!customer) {
-        console.log('No customer logged in');
-        this.router.navigate(['customer-login']);
-      }
+    }).subscribe(({ bookings, hotels, rooms, chains, addresses }) => {
       
-      for(const b of bookings) {
-        if(b.customerId === customer.id) {
-          this.customerBookings.push(b);
-        }
+      for (const b of bookings) {
+        this.loggedInUserService.getLoggedInCustomer().subscribe(customer => {
+          if (b.customerId === customer.id) {
+            this.customerBookings.push(b);
+          }
+        });
       }
 
       
@@ -98,11 +95,6 @@ export class CustomerBookingsComponent {
       }
     
     })
-    if(this.customerBookings.length === 0) {
-      alert('You have no bookings!');``
-      this.router.navigate(['customer-landing']);
-      return;
-    } 
     
   }
 

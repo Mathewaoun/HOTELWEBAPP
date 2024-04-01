@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <main>
+        <h1>Booking Confirmation</h1>
+        <section class="confirmation-details">
+            <h2>Customer Details:</h2>
+            <p><strong>Name: </strong> <span id="customerName">{{ customerName }}</span></p>
+            <p><strong>Room Number: </strong> <span id="roomNumber">{{ roomData.id }}</span></p>
+            <p><strong>Check-in Date: </strong> <span id="checkInDate">{{ roomData.checkInDate }}</span></p>
+            <p><strong>Check-out Date: </strong> <span id="checkOutDate">{{ roomData.checkOutDate }}</span></p>
+            <p><strong>Total Price: $</strong> <span id="checkOutDate">{{ totalPrice }}</span></p>
+        </section>
+        <div class="button-container">
+            <button (click) = "confirmBooking()" class="view-booking-btn">Confirm Booking?</button>
+            <button (click) = "goBack()" class="new-booking-btn">Go Back</button>
+        </div>
+    </main>
+</body>
+</html>

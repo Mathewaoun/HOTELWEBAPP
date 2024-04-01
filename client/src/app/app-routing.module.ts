@@ -12,6 +12,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { CustomerLandingComponent } from './customer-landing/customer-landing.component';
 import { CustomerBookingsComponent } from './customer-bookings/customer-bookings.component';
+import { CreateBookingComponent } from './create-booking/create-booking.component';
 
 
 export const routes: Routes = [
@@ -27,7 +28,8 @@ export const routes: Routes = [
   { path: 'confirmation', component: ConfirmationComponent},
   { path: 'search-rooms', component: SearchRoomsComponent},
   { path: 'customer-landing', component: CustomerLandingComponent},
-  { path: 'customer-bookings', component: CustomerBookingsComponent}
+  { path: 'customer-bookings', component: CustomerBookingsComponent},
+  { path: 'create-booking', component: CreateBookingComponent}
 
   // Add more routes as needed
 ];

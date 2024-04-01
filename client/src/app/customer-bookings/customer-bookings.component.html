@@ -8,12 +8,12 @@
   <body>
     <main>
       <section class="booking-info" *ngFor = "let b of bookingData">
-        <p><strong>Hotel:</strong> {{ b.chainName }}</p>
-        <p><strong>Address:</strong>{{ b.hotelAddress }}</p>
-        <p><strong>Room Number:</strong>{{ b.roomNumber }}</p>
-        <p><strong>Check-in Date:</strong>{{ b.checkInDate }}</p>
-        <p><strong>Check-out Date:</strong>{{ b.checkOutDate }}</p>
-        <p><strong>Date Booked:</strong>{{ b.dateBooked }}</p>
+        <p><strong>Hotel: </strong> {{ b.chainName }}</p>
+        <p><strong>Address: </strong>{{ b.hotelAddress }}</p>
+        <p><strong>Room Number: </strong>{{ b.roomNumber }}</p>
+        <p><strong>Check-in Date: </strong>{{ b.checkInDate }}</p>
+        <p><strong>Check-out Date: </strong>{{ b.checkOutDate }}</p>
+        <p><strong>Date Booked: </strong>{{ b.dateBooked }}</p>
       </section>
         <div class="button-container">
             <button class="back-button" (click) = "goBack()">Back</button>

@@ -142,6 +142,16 @@ router.post('/createCustomer', async (req, res) => {
     }
 });
 
+router.post('/createArchive', (req, res) => {
+    try {
+        const {id, customerFirstName, customerLastName, roomNumber, checkInDate, checkOutDate, bookingDate} = req.body;
+        const newArchive = new Archive(id, customerFirstName, customerLastName, roomNumber, checkInDate, checkOutDate, bookingDate);
+        insertArchive(newArchive);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // create a new booking
 router.post('/createBooking', (req, res) => {
     try {
