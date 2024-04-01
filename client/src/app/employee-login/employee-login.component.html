@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm" [formGroup] = "loginForm">
+            <label for="employeeId">Employee Username:</label>
+            <input formControlName = "username" type="text" id="employeeId" name="username" required>
+            <label for="employeepass">Employee Password:</label>
+            <input formControlName = "password" type="password" id="employeepass" name="password" required>
+            <button type="submit" (click) = "validateLogin()">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

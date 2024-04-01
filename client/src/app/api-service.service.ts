@@ -146,4 +146,44 @@ export class ApiService {
     return this.http.get<Booking>(`${this.baseUrl}/booking/${id}`);
   }
 
+  createCustomer(customer: Customer): Observable<Customer> {
+    console.log("Reached createCustomer in api-service");
+    return this.http.post<Customer>(`${this.baseUrl}/createCustomer`, customer);
+  }
+
+  createAddress(address: Address): Observable<Address> {
+    console.log("Reached createAddress in api-service");
+    return this.http.post<Address>(`${this.baseUrl}/createAddress`, address);
+  }
+
+  createBooking(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(`${this.baseUrl}/createBooking`, booking);
+  }
+
+  createArchive(archive: Archive): Observable<Archive> {
+    return this.http.post<Archive>(`${this.baseUrl}/createArchive`, archive);
+  }
+
+  deleteChain(chain: Chain): Observable<Chain> {
+    return this.http.delete<Chain>(`${this.baseUrl}/deleteChain/${chain.id}`);
+  }
+
+  deleteHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.delete<Hotel>(`${this.baseUrl}/deleteHotel/${hotel.id}`);
+  }
+
+  deleteRoom(room: Room): Observable<Room> {
+    return this.http.delete<Room>(`${this.baseUrl}/deleteRoom/${room.id}`);
+  }
+
+  deleteEmployee(employee: Employee): Observable<Employee> {
+    return this.http.delete<Employee>(`${this.baseUrl}/deleteEmployee/${employee.id}`);
+  }
+
+  deleteBooking(booking: Booking): Observable<Booking> {
+    return this.http.delete<Booking>(`${this.baseUrl}/deleteBooking/${booking.id}`);
+  }
+
+
+
 }

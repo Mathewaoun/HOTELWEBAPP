@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - MFD Hotels</title>
+  </head>
+  <body>
+    <main class="contact-main">
+      <h1>Contact Our Hotels</h1>
+      <div class="hotels-list" *ngFor = "let chain of chains">
+        <article class = "hotel">
+            <h2>{{chain.name}}</h2>
+            <!-- <p>{{chain.address}}</p> -->
+            <p>Phone: {{chain.phoneNumbers}}</p>
+        </article>
+
+      </div>
+    </main>
+  </body>
+</html>

@@ -49,6 +49,11 @@ const { getArchive,
     insertAddress,
     insertBooking,
     insertArchive,
+    deleteChain,
+    deleteHotel,
+    deleteRoom,
+    deleteEmployee,
+    deleteBooking,
     closeDatabase
 } = require('../utils/db');
 
@@ -128,11 +133,21 @@ router.get('/getAddresses', (req, res) => {
 });
 
 // create a new customer
-router.post('/createCustomer', (req, res) => {
+router.post('/createCustomer', async (req, res) => {
     try {
-        const {id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId} = req.body;
-        const newCustomer = new Customer(id, identification, firstName, lastName, email, password, registrationDate, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId);
-        insertCustomer(newCustomer);
+        const {id, identification, firstName, lastName, email, password, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId} = req.body;
+        const newCustomer = new Customer(id, identification, firstName, lastName, email, password, cardholderName, cardNumber, cvv, cardExpiration, billingAddressId, addressId);
+        await insertCustomer(newCustomer);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.post('/createArchive', (req, res) => {
+    try {
+        const {id, customerFirstName, customerLastName, roomNumber, checkInDate, checkOutDate, bookingDate} = req.body;
+        const newArchive = new Archive(id, customerFirstName, customerLastName, roomNumber, checkInDate, checkOutDate, bookingDate);
+        insertArchive(newArchive);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -161,11 +176,11 @@ router.post('/createArchive', (req, res) => {
 });
 
 // create a new address
-router.post('/createAddress', (req, res) => {
+router.post('/createAddress', async (req, res) => {
     try {
-        const {id, street, apt, postalCode, city, province} = req.body;
-        const newAddress = new Address(id, street, apt, postalCode, city, province);
-        insertAddress(newAddress);
+        const {id, street, apt, postalCode, province, city} = req.body;
+        const newAddress = new Address(id, street, apt, postalCode, province, city);
+        await insertAddress(newAddress);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -382,9 +397,54 @@ router.get('/archiveByCustomerID/:customerID', (req, res) => {
 });
 
 // get an address by the address id
+// get an address by the address id
 router.get('/address/:id', (req, res) => {
     getAddressByID(req.params.id).then(address => {
         res.json(address);
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a chain by their id
+router.delete('/deleteChain/:id', (req, res) => {
+    deleteChain(req.params.id).then(() => {
+        res.json({ message: 'Chain deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a hotel by their id
+router.delete('/deleteHotel/:id', (req, res) => {
+    deleteHotel(req.params.id).then(() => {
+        res.json({ message: 'Hotel deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete a room by their id
+router.delete('/deleteRoom/:id', (req, res) => {
+    deleteRoom(req.params.id).then(() => {
+        res.json({ message: 'Room deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+// delete an employee by their id
+router.delete('/deleteEmployee/:id', (req, res) => {
+    deleteEmployee(req.params.id).then(() => {
+        res.json({ message: 'Employee deleted' });
+    }).catch(error => {
+        res.status(500).json({ error: error.message });
+    });
+});
+
+router.delete('/deleteBooking/:id', (req, res) => {
+    deleteBooking(req.params.id).then(() => {
+        res.json({ message: 'Chain deleted' });
     }).catch(error => {
         res.status(500).json({ error: error.message });
     });

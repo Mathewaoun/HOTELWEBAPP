@@ -15,10 +15,7 @@ function connectToDatabase() {
   const db = new sqlite3.Database('./db/database.db', (err) => {
     if (err) {
       console.error('Error connecting to SQLite database:', err);
-    } else {
-      console.log('Connected to SQLite database in db.js.');
-    }
-  });
+    }});
 
   return db;
 }
@@ -64,7 +61,6 @@ async function getCustomers() {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -248,7 +244,6 @@ async function getCustomerByID(id) {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -278,7 +273,6 @@ async function getCustomerByEmail(email) {
           row.COLUMN_CUSTOMER_LAST_NAME,
           row.COLUMN_CUSTOMER_EMAIL,
           row.COLUMN_CUSTOMER_PASSWORD,
-          row.COLUMN_CUSTOMER_REGISTRATION_DATE,
           row.COLUMN_CUSTOMER_CARDHOLDER_NAME,
           row.COLUMN_CUSTOMER_CARD_NUMBER,
           row.COLUMN_CUSTOMER_CVV,
@@ -799,53 +793,59 @@ async function getHotelNumRoomsByID(id) {
   });
 }
 
-function insertCustomer(c) {
-    db.run(`INSERT INTO ${CUSTOMER_TABLE} 
-                    (${COLUMN_CUSTOMER_IDENTIFICATION}, 
-                      ${COLUMN_CUSTOMER_FIRST_NAME}, 
-                      ${COLUMN_CUSTOMER_LAST_NAME}, 
-                      ${COLUMN_CUSTOMER_EMAIL}, 
-                      ${COLUMN_CUSTOMER_PASSWORD}, 
-                      ${COLUMN_CUSTOMER_REGISTRATION_DATE}, 
-                      ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
-                      ${COLUMN_CUSTOMER_CARD_NUMBER}, 
-                      ${COLUMN_CUSTOMER_CVV}, 
-                      ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
-                      ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
-                      ${COLUMN_CUSTOMER_ADDRESS_ID}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getRegistrationDate(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting customer:', err.message);
-                        } else {
-                            console.log('Customer inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertCustomer(c) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${CUSTOMER_TABLE} 
+                  (${COLUMN_CUSTOMER_IDENTIFICATION}, 
+                    ${COLUMN_CUSTOMER_FIRST_NAME}, 
+                    ${COLUMN_CUSTOMER_LAST_NAME}, 
+                    ${COLUMN_CUSTOMER_EMAIL}, 
+                    ${COLUMN_CUSTOMER_PASSWORD},  
+                    ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
+                    ${COLUMN_CUSTOMER_CARD_NUMBER}, 
+                    ${COLUMN_CUSTOMER_CVV}, 
+                    ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
+                    ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
+                    ${COLUMN_CUSTOMER_ADDRESS_ID}) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting customer:', err.message);
+                      } else {
+                          console.log('Customer inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+
+  closeDatabase(db);
+
+  return result;
 }
 
-function insertBooking(b) {
-    db.run(`INSERT INTO ${BOOKING_TABLE} 
-                    (${COLUMN_BOOKING_CUSTOMER_ID}, 
-                      ${COLUMN_BOOKING_EMPLOYEE_ID}, 
-                      ${COLUMN_BOOKING_ROOM_ID}, 
-                      ${COLUMN_BOOKING_ARCHIVE_ID}, 
-                      ${COLUMN_BOOKING_DATE_BOOKED}, 
-                      ${COLUMN_BOOKING_CUSTOMER_NAME}, 
-                      ${COLUMN_BOOKING_CHECK_IN_DATE}, 
-                      ${COLUMN_BOOKING_CHECK_OUT_DATE}, 
-                      ${COLUMN_BOOKING_NUM_PEOPLE}, 
-                      ${COLUMN_BOOKING_IS_RENTING}, 
-                      ${COLUMN_BOOKING_PAID_ONLINE}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [b.getCustomerId(), b.getEmployeeId(), b.getRoomId(), b.getArchiveId(), b.getDateBooked(), b.getCustomerName(), b.getCheckInDate(), b.getCheckOutDate(), b.getNumPeople(), b.getIsRenting(), b.getPaidOnline()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting booking:', err.message);
-                        } else {
-                            console.log('Booking inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertBooking(b) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${BOOKING_TABLE} 
+                  (${COLUMN_BOOKING_CUSTOMER_ID}, 
+                    ${COLUMN_BOOKING_EMPLOYEE_ID}, 
+                    ${COLUMN_BOOKING_ROOM_ID}, 
+                    ${COLUMN_BOOKING_ARCHIVE_ID}, 
+                    ${COLUMN_BOOKING_DATE_BOOKED}, 
+                    ${COLUMN_BOOKING_CUSTOMER_NAME}, 
+                    ${COLUMN_BOOKING_CHECK_IN_DATE}, 
+                    ${COLUMN_BOOKING_CHECK_OUT_DATE}, 
+                    ${COLUMN_BOOKING_NUM_PEOPLE}, 
+                    ${COLUMN_BOOKING_IS_RENTING}, 
+                    ${COLUMN_BOOKING_PAID_ONLINE}) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [b.getCustomerId(), b.getEmployeeId(), b.getRoomId(), b.getArchiveId(), b.getDateBooked(), b.getCustomerName(), b.getCheckInDate(), b.getCheckOutDate(), b.getNumPeople(), b.getIsRenting(), b.getPaidOnline()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting booking:', err.message);
+                      } else {
+                          console.log('Booking inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+  closeDatabase(db);
 }
 
 function insertRoom(r) {
@@ -926,51 +926,115 @@ function insertChain(c) {
                     });
 }
 
-function insertAddress(a) {
-    db.run(`INSERT INTO ${ADDRESS_TABLE} 
-                    (${COLUMN_ADDRESS_STREET}, 
-                      ${COLUMN_ADDRESS_APT}, 
-                      ${COLUMN_ADDRESS_POSTAL}, 
-                      ${COLUMN_ADDRESS_PROVINCE}, 
-                      ${COLUMN_ADDRESS_CITY}) 
-                      VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting address:', err.message);
-                        } else {
-                            console.log('Address inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertAddress(a) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${ADDRESS_TABLE} 
+                  (${COLUMN_ADDRESS_STREET}, 
+                    ${COLUMN_ADDRESS_APT}, 
+                    ${COLUMN_ADDRESS_POSTAL}, 
+                    ${COLUMN_ADDRESS_PROVINCE}, 
+                    ${COLUMN_ADDRESS_CITY}) 
+                    VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting address:', err.message);
+                      } else {
+                          console.log('Address inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+
+  closeDatabase(db);
+
+  return result;
 }
 
-function insertArchive(archive) {
-    db.run(`INSERT INTO ${ARCHIVE_TABLE} 
-                    (${COLUMN_ARCHIVE_CUSTOMER_FIRST_NAME}, 
-                      ${COLUMN_ARCHIVE_CUSTOMER_LAST_NAME}, 
-                      ${COLUMN_ARCHIVE_ROOM_NUMBER}, 
-                      ${COLUMN_ARCHIVE_CHECK_IN_DATE}, 
-                      ${COLUMN_ARCHIVE_CHECK_OUT_DATE}, 
-                      ${COLUMN_ARCHIVE_BOOKING_DATE}) 
-                      VALUES (?, ?, ?, ?, ?, ?)`, [archive.getCustomerFirstName(), archive.getCustomerLastName(), archive.getRoomNumber(), archive.getCheckInDate(), archive.getCheckOutDate(), archive.getBookingDate()], function(err) {
-                        if (err) {
-                            // Handle the error here
-                            console.error('Error inserting Archive:', err.message);
-                        } else {
-                            console.log('Archive inserted successfully');
-                            // Handle success here if needed
-                        }
-                    });
+async function insertArchive(archive) {
+  const db = connectToDatabase();
+  const result = await db.run(`INSERT INTO ${ARCHIVE_TABLE} 
+                  (${COLUMN_ARCHIVE_CUSTOMER_FIRST_NAME}, 
+                    ${COLUMN_ARCHIVE_CUSTOMER_LAST_NAME}, 
+                    ${COLUMN_ARCHIVE_ROOM_NUMBER}, 
+                    ${COLUMN_ARCHIVE_CHECK_IN_DATE}, 
+                    ${COLUMN_ARCHIVE_CHECK_OUT_DATE}, 
+                    ${COLUMN_ARCHIVE_BOOKING_DATE}) 
+                    VALUES (?, ?, ?, ?, ?, ?)`, [archive.getCustomerFirstName(), archive.getCustomerLastName(), archive.getRoomNumber(), archive.getCheckInDate(), archive.getCheckOutDate(), archive.getBookingDate()], function(err) {
+                      if (err) {
+                          // Handle the error here
+                          console.error('Error inserting Archive:', err.message);
+                      } else {
+                          console.log('Archive inserted successfully');
+                          // Handle success here if needed
+                      }
+                  });
+  closeDatabase(db);
+}
+
+async function deleteChain(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM CHAIN_TABLE WHERE COLUMN_CHAIN_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting chain:', err);
+    } else {
+      console.log('Chain deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteHotel(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM HOTEL_TABLE WHERE COLUMN_HOTEL_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting hotel:', err);
+    } else {
+      console.log('Hotel deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteRoom(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM ROOM_TABLE WHERE COLUMN_ROOM_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting room:', err);
+    } else {
+      console.log('Room deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteEmployee(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM EMPLOYEE_TABLE WHERE COLUMN_EMPLOYEE_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting employee:', err);
+    } else {
+      console.log('Employee deleted successfully');
+    }
+  });
+  closeDatabase(db);
+}
+
+async function deleteBooking(id) {
+  const db = connectToDatabase();
+  const result = await db.run('DELETE FROM BOOKING_TABLE WHERE COLUMN_BOOKING_ID = ?', [id], (err) => {
+    if (err) {
+      console.error('Error deleting booking:', err);
+    } else {
+      console.log('Booking deleted successfully');
+    }
+  });
+  closeDatabase(db);
 }
 
 function closeDatabase(db) {
     db.close((err) => {
       if (err) {
         console.error('Error closing database:', err);
-      } else {
-        console.log('Database connection closed');
-      }
-    });
+      }});
 }
 
 module.exports = { 
@@ -1014,5 +1078,10 @@ module.exports = {
     insertChain,
     insertAddress,
     insertArchive,
+    deleteChain,
+    deleteHotel,
+    deleteRoom,
+    deleteEmployee,
+    deleteBooking,
     closeDatabase
 };

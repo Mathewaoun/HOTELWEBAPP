@@ -74,7 +74,6 @@ COLUMN_CUSTOMER_FIRST_NAME            = "COLUMN_CUSTOMER_FIRST_NAME";
 COLUMN_CUSTOMER_LAST_NAME             = "COLUMN_CUSTOMER_LAST_NAME";
 COLUMN_CUSTOMER_EMAIL                 = "COLUMN_CUSTOMER_EMAIL";
 COLUMN_CUSTOMER_PASSWORD              = "COLUMN_CUSTOMER_PASSWORD";
-COLUMN_CUSTOMER_REGISTRATION_DATE     = "COLUMN_CUSTOMER_REGISTRATION_DATE";
 COLUMN_CUSTOMER_CARDHOLDER_NAME       = "COLUMN_CUSTOMER_CARDHOLDER_NAME";
 COLUMN_CUSTOMER_CARD_NUMBER           = "COLUMN_CUSTOMER_CARD_NUMBER";
 COLUMN_CUSTOMER_CVV                   = "COLUMN_CUSTOMER_CVV";
@@ -219,7 +218,6 @@ function createDatabase() {
     ${COLUMN_CUSTOMER_LAST_NAME} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_EMAIL} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_PASSWORD} TEXT NOT NULL,
-    ${COLUMN_CUSTOMER_REGISTRATION_DATE} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CARDHOLDER_NAME} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CARD_NUMBER} TEXT NOT NULL,
     ${COLUMN_CUSTOMER_CVV} TEXT NOT NULL,
@@ -239,7 +237,7 @@ function createDatabase() {
   db.run(`CREATE TABLE ${BOOKING_TABLE} (
     ${COLUMN_BOOKING_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${COLUMN_BOOKING_CUSTOMER_ID} INTEGER NOT NULL,
-    ${COLUMN_BOOKING_EMPLOYEE_ID} INTEGER NOT NULL,
+    ${COLUMN_BOOKING_EMPLOYEE_ID} INTEGER,
     ${COLUMN_BOOKING_ROOM_ID} INTEGER NOT NULL,
     ${COLUMN_BOOKING_ARCHIVE_ID} INTEGER,
     ${COLUMN_BOOKING_DATE_BOOKED} TEXT NOT NULL,
@@ -425,12 +423,12 @@ function populateDatabase() {
 
   const rooms = [marriotRoom1, marriotRoom2, marriotRoom3, marriotRoom4, marriotRoom5, hiltonRoom1, hiltonRoom2, hiltonRoom3, hiltonRoom4, hiltonRoom5, bestWesternRoom1, bestWesternRoom2, bestWesternRoom3, bestWesternRoom4, bestWesternRoom5, holidayInnRoom1, holidayInnRoom2, holidayInnRoom3, holidayInnRoom4, holidayInnRoom5, sheratonRoom1, sheratonRoom2, sheratonRoom3, sheratonRoom4, sheratonRoom5];
 
-  const c1 = new Customer(1, "842803713", "John", "Doe", "email@gmail.com", "Password1!", "2021-01-01", "John Doe", "1415064812040635", "798", "2026-10-13", 1, 1);
-  const c2 = new Customer(2, "521741541", "Jane", "Doe", "jane@gmail.com", "Password1!", "2021-01-01", "Jane Doe", "7061703586553058", "992", "2025-07-08", 2, 2);
-  const c3 = new Customer(3, "281372011", "John", "Smith", "johnsmith@gmail.com", "Password1!", "2021-01-01", "John Smith", "0795504666575185", "199", "2025-04-15", 3, 3);
-  const c4 = new Customer(4, "767940234", "Jane", "Smith", "janesmith@gmail.com", "Password1!", "2021-01-01", "Jane Smith", "8508741780880762", "462", "2023-11-21", 4, 4);
-  const c5 = new Customer(5, "030023040", "John", "Johnson", "johnjohnson@gmail.com", "Password1!", "2021-01-01", "John Johnson", "1234567890123456", "123", "2024-12-31", 5, 5);
-  const c6 = new Customer(6, "484014832", "Jane", "Johnson", "janejohnson@gmail.com", "Password1!", "2021-01-01", "Jane Johnson", "9876543210987654", "987", "2025-01-01", 6, 6);
+  const c1 = new Customer(1, "842803713", "John", "Doe", "email@gmail.com", "Password1!", "John Doe", "1415064812040635", "798", "2026-10-13", 1, 1);
+  const c2 = new Customer(2, "521741541", "Jane", "Doe", "jane@gmail.com", "Password1!", "Jane Doe", "7061703586553058", "992", "2025-07-08", 2, 2);
+  const c3 = new Customer(3, "281372011", "John", "Smith", "johnsmith@gmail.com", "Password1!", "John Smith", "0795504666575185", "199", "2025-04-15", 3, 3);
+  const c4 = new Customer(4, "767940234", "Jane", "Smith", "janesmith@gmail.com", "Password1!", "Jane Smith", "8508741780880762", "462", "2023-11-21", 4, 4);
+  const c5 = new Customer(5, "030023040", "John", "Johnson", "johnjohnson@gmail.com", "Password1!", "John Johnson", "1234567890123456", "123", "2024-12-31", 5, 5);
+  const c6 = new Customer(6, "484014832", "Jane", "Johnson", "janejohnson@gmail.com", "Password1!", "Jane Johnson", "9876543210987654", "987", "2025-01-01", 6, 6);
 
   const customers = [c1, c2, c3, c4, c5, c6];
 
@@ -555,14 +553,13 @@ function populateDatabase() {
                       ${COLUMN_CUSTOMER_LAST_NAME}, 
                       ${COLUMN_CUSTOMER_EMAIL}, 
                       ${COLUMN_CUSTOMER_PASSWORD}, 
-                      ${COLUMN_CUSTOMER_REGISTRATION_DATE}, 
                       ${COLUMN_CUSTOMER_CARDHOLDER_NAME}, 
                       ${COLUMN_CUSTOMER_CARD_NUMBER}, 
                       ${COLUMN_CUSTOMER_CVV}, 
                       ${COLUMN_CUSTOMER_CARD_EXPIRATION}, 
                       ${COLUMN_CUSTOMER_BILLING_ADDRESS_ID}, 
                       ${COLUMN_CUSTOMER_ADDRESS_ID}) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getRegistrationDate(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [c.getIdentification(), c.getFirstName(), c.getLastName(), c.getEmail(), c.getPassword(), c.getCardholderName(), c.getCardNumber(), c.getCvv(), c.getCardExpiration(), c.getBillingAddressId(), c.getAddressId()], function(err) {
                         if (err) {
                             // Handle the error here
                             console.error('Error inserting customer:', err.message);
@@ -619,6 +616,435 @@ function populateDatabase() {
   closeDatabase(db);
 }
 
+function populateRooms() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const hiltonRoom1 = new Room(26, 6, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const hiltonRoom2 = new Room(27, 6, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const hiltonRoom3 = new Room(28, 6, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const hiltonRoom4 = new Room(29, 6, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const hiltonRoom5 = new Room(30, 6, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const hiltonRoom6 = new Room(31, 7, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const hiltonRoom7 = new Room(32, 7, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const hiltonRoom8 = new Room(33, 7, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const hiltonRoom9 = new Room(34, 7, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const hiltonRoom10 = new Room(35, 7, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const hiltonRoom11 = new Room(36, 8, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const hiltonRoom12 = new Room(37, 8, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const hiltonRoom13 = new Room(38, 8, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const hiltonRoom14 = new Room(39, 8, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const hiltonRoom15 = new Room(40, 8, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const hiltonRoom16 = new Room(41, 9, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const hiltonRoom17 = new Room(42, 9, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const hiltonRoom18 = new Room(43, 9, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const hiltonRoom19 = new Room(44, 9, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const hiltonRoom20 = new Room(45, 9, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const hiltonRoom21 = new Room(46, 10, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const hiltonRoom22 = new Room(47, 10, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const hiltonRoom23 = new Room(48, 10, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const hiltonRoom24 = new Room(49, 10, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const hiltonRoom25 = new Room(50, 10, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const bestWesternRoom1 = new Room(51, 11, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const bestWesternRoom2 = new Room(52, 11, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const bestWesternRoom3 = new Room(53, 11, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const bestWesternRoom4 = new Room(54, 11, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const bestWesternRoom5 = new Room(55, 11, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const bestWesternRoom6 = new Room(56, 12, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const bestWesternRoom7 = new Room(57, 12, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const bestWesternRoom8 = new Room(58, 12, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const bestWesternRoom9 = new Room(59, 12, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const bestWesternRoom10 = new Room(60, 12, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const bestWesternRoom11 = new Room(61, 13, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const bestWesternRoom12 = new Room(62, 13, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const bestWesternRoom13 = new Room(63, 13, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const bestWesternRoom14 = new Room(64, 13, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const bestWesternRoom15 = new Room(65, 13, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const bestWesternRoom16 = new Room(66, 14, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const bestWesternRoom17 = new Room(67, 14, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const bestWesternRoom18 = new Room(68, 14, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const bestWesternRoom19 = new Room(69, 14, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const bestWesternRoom20 = new Room(70, 14, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const bestWesternRoom21 = new Room(71, 15, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const bestWesternRoom22 = new Room(72, 15, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const bestWesternRoom23 = new Room(73, 15, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const bestWesternRoom24 = new Room(74, 15, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const bestWesternRoom25 = new Room(75, 15, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const holidayInnRoom1 = new Room(76, 16, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const holidayInnRoom2 = new Room(77, 16, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const holidayInnRoom3 = new Room(78, 16, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const holidayInnRoom4 = new Room(79, 16, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const holidayInnRoom5 = new Room(80, 16, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const holidayInnRoom6 = new Room(81, 17, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const holidayInnRoom7 = new Room(82, 17, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const holidayInnRoom8 = new Room(83, 17, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const holidayInnRoom9 = new Room(84, 17, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const holidayInnRoom10 = new Room(85, 17, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const holidayInnRoom11 = new Room(86, 18, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const holidayInnRoom12 = new Room(87, 18, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const holidayInnRoom13 = new Room(88, 18, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const holidayInnRoom14 = new Room(89, 18, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const holidayInnRoom15 = new Room(90, 18, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  
+  const holidayInnRoom16 = new Room(91, 19, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const holidayInnRoom17 = new Room(92, 19, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const holidayInnRoom18 = new Room(93, 19, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const holidayInnRoom19 = new Room(94, 19, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const holidayInnRoom20 = new Room(95, 19, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const holidayInnRoom21 = new Room(96, 25, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const holidayInnRoom22 = new Room(97, 25, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const holidayInnRoom23 = new Room(98, 25, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const holidayInnRoom24 = new Room(99, 25, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const holidayInnRoom25 = new Room(100, 25, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const sheratonRoom1 = new Room(101, 20, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const sheratonRoom2 = new Room(102, 20, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const sheratonRoom3 = new Room(103, 20, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const sheratonRoom4 = new Room(104, 20, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const sheratonRoom5 = new Room(105, 20, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const sheratonRoom6 = new Room(106, 21, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const sheratonRoom7 = new Room(107, 21, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const sheratonRoom8 = new Room(108, 21, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const sheratonRoom9 = new Room(109, 21, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const sheratonRoom10 = new Room(110, 21, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const sheratonRoom11 = new Room(111, 22, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const sheratonRoom12 = new Room(112, 22, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const sheratonRoom13 = new Room(113, 22, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const sheratonRoom14 = new Room(114, 22, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const sheratonRoom15 = new Room(115, 22, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const sheratonRoom16 = new Room(116, 23, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const sheratonRoom17 = new Room(117, 23, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const sheratonRoom18 = new Room(118, 23, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const sheratonRoom19 = new Room(119, 23, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const sheratonRoom20 = new Room(120, 23, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const sheratonRoom21 = new Room(121, 24, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const sheratonRoom22 = new Room(122, 24, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+  const sheratonRoom23 = new Room(123, 24, 200, "TV, Fridge, Microwave", 3, true, false, true, "None");
+  const sheratonRoom24 = new Room(124, 24, 250, "TV, Fridge, Microwave", 4, true, false, true, "None");
+  const sheratonRoom25 = new Room(125, 24, 300, "TV, Fridge, Microwave", 2, true, false, true, "None");
+
+  const rooms = [hiltonRoom1, hiltonRoom2, hiltonRoom3, hiltonRoom4, hiltonRoom5, 
+                  hiltonRoom6, hiltonRoom7, hiltonRoom8, hiltonRoom9, hiltonRoom10, 
+                  hiltonRoom11, hiltonRoom12, hiltonRoom13, hiltonRoom14, hiltonRoom15, 
+                  hiltonRoom16, hiltonRoom17, hiltonRoom18, hiltonRoom19, hiltonRoom20, 
+                  hiltonRoom21, hiltonRoom22, hiltonRoom23, hiltonRoom24, hiltonRoom25, 
+                  bestWesternRoom1, bestWesternRoom2, bestWesternRoom3, bestWesternRoom4, bestWesternRoom5, 
+                  bestWesternRoom6, bestWesternRoom7, bestWesternRoom8, bestWesternRoom9, bestWesternRoom10, 
+                  bestWesternRoom11, bestWesternRoom12, bestWesternRoom13, bestWesternRoom14, bestWesternRoom15, 
+                  bestWesternRoom16, bestWesternRoom17, bestWesternRoom18, bestWesternRoom19, bestWesternRoom20, 
+                  bestWesternRoom21, bestWesternRoom22, bestWesternRoom23, bestWesternRoom24, bestWesternRoom25,
+                  holidayInnRoom1, holidayInnRoom2, holidayInnRoom3, holidayInnRoom4, holidayInnRoom5, 
+                  holidayInnRoom6, holidayInnRoom7, holidayInnRoom8, holidayInnRoom9, holidayInnRoom10, 
+                  holidayInnRoom11, holidayInnRoom12, holidayInnRoom13, holidayInnRoom14, holidayInnRoom15, 
+                  holidayInnRoom16, holidayInnRoom17, holidayInnRoom18, holidayInnRoom19, holidayInnRoom20, 
+                  holidayInnRoom21, holidayInnRoom22, holidayInnRoom23, holidayInnRoom24, holidayInnRoom25, 
+                  sheratonRoom1, sheratonRoom2, sheratonRoom3, sheratonRoom4, sheratonRoom5, 
+                  sheratonRoom6, sheratonRoom7, sheratonRoom8, sheratonRoom9, sheratonRoom10, 
+                  sheratonRoom11, sheratonRoom12, sheratonRoom13, sheratonRoom14, sheratonRoom15, 
+                  sheratonRoom16, sheratonRoom17, sheratonRoom18, sheratonRoom19, sheratonRoom20, 
+                  sheratonRoom21, sheratonRoom22, sheratonRoom23, sheratonRoom24, sheratonRoom25];
+
+  for (let r of rooms) {
+    db.run(`INSERT INTO ${ROOM_TABLE} 
+                    (${COLUMN_ROOM_HOTEL_ID}, 
+                      ${COLUMN_ROOM_PRICE}, 
+                      ${COLUMN_ROOM_AMENITIES}, 
+                      ${COLUMN_ROOM_CAPACITY}, 
+                      ${COLUMN_ROOM_MOUNTAIN_VIEW}, 
+                      ${COLUMN_ROOM_SEA_VIEW}, 
+                      ${COLUMN_ROOM_EXTENDABLE}, 
+                      ${COLUMN_ROOM_ISSUES}) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [r.getHotelId(), r.getPrice(), r.getAmenities(), r.getCapacity(), r.getMountainView(), r.getSeaView(), r.getExtendable(), r.getIssues()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting room:', err.message);
+                        } else {
+                            console.log('Room inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  closeDatabase(db);
+
+}
+
+function createAdmin() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const admin = new Employee(26, -1, "System", "Administrator", "admin", "admin", -1, "Admin");
+  db.run(`INSERT INTO ${EMPLOYEE_TABLE} 
+                    (${COLUMN_EMPLOYEE_HOTEL_ID}, 
+                      ${COLUMN_EMPLOYEE_FIRST_NAME}, 
+                      ${COLUMN_EMPLOYEE_LAST_NAME}, 
+                      ${COLUMN_EMPLOYEE_USERNAME}, 
+                      ${COLUMN_EMPLOYEE_PASSWORD}, 
+                      ${COLUMN_EMPLOYEE_ADDRESS_ID}, 
+                      ${COLUMN_EMPLOYEE_ROLE}) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?)`, [admin.getHotelId(), 
+                                                      admin.getFirstName(), 
+                                                      admin.getLastName(), 
+                                                      admin.getUserName(), 
+                                                      admin.getPassword(), 
+                                                      admin.getAddressId(), 
+                                                      admin.getRole()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting Admin:', err.message);
+                        } else {
+                            console.log('Admin inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+
+  closeDatabase(db);
+}
+
+function createDummyChain() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const chainAddress = new Address(51, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress1 = new Address(52, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress2 = new Address(53, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const employeeAddress1 = new Address(54, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress2 = new Address(55, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress3 = new Address(56, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress4 = new Address(57, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const firstHotel = new Hotel(26, 6, 4, 2, 51, "fake@gmail.com", "1234567890");
+  const secondHotel = new Hotel(27, 6, 4, 2, 52, "fake@email.com", "0987654321");
+
+  const firstHotelRoom1 = new Room(126, 26, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const firstHotelRoom2 = new Room(127, 26, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const secondHotelRoom1 = new Room(128, 27, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const secondHotelRoom2 = new Room(129, 27, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const firstHotelEmployee1 = new Employee(26, 26, "John", "Doe", "johndoe", "password", 54, "Manager");
+  const firstHotelEmployee2 = new Employee(27, 26, "Jane", "Doe", "janedoe", "password", 55, "Receptionist");
+
+  const secondHotelEmployee1 = new Employee(28, 27, "John", "Smith", "johnsmith", "password", 56, "Manager");
+  const secondHotelEmployee2 = new Employee(29, 27, "Jane", "Smith", "janesmith", "password", 57, "Receptionist");
+
+  const chain = new Chain(6, "Fake Chain", 51, 2, "chain@email.com", ["1234567890"]);
+  
+  for (let a of [chainAddress, hotelAddress1, hotelAddress2, employeeAddress1, employeeAddress2, employeeAddress3, employeeAddress4]) {
+    db.run(`INSERT INTO ${ADDRESS_TABLE}
+                    (${COLUMN_ADDRESS_STREET},
+                      ${COLUMN_ADDRESS_APT},
+                      ${COLUMN_ADDRESS_POSTAL},
+                      ${COLUMN_ADDRESS_PROVINCE},
+                      ${COLUMN_ADDRESS_CITY})
+                      VALUES (?, ?, ?, ?, ?)`, [a.getStreet(), a.getApt(), a.getPostalCode(), a.getProvince(), a.getCity()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting address:', err.message);
+                        } else {
+                            console.log('Address inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  for(let h of [firstHotel, secondHotel]) {
+    db.run(`INSERT INTO ${HOTEL_TABLE}
+                    (${COLUMN_HOTEL_CHAIN_ID},
+                      ${COLUMN_HOTEL_RATING},
+                      ${COLUMN_HOTEL_NUM_ROOMS},
+                      ${COLUMN_HOTEL_ADDRESS_ID},
+                      ${COLUMN_HOTEL_EMAIL},
+                      ${COLUMN_HOTEL_PHONE_NUMBERS})
+                      VALUES (?, ?, ?, ?, ?, ?)`, [h.getChainID(), h.getRating(), h.getNumRooms(), h.getAddressID(), h.getEmail(), h.getPhone()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting hotel:', err.message);
+                        } else {
+                            console.log('Hotel inserted successfully');
+                            // Handle success here if needed
+                        }
+                    }); 
+  }
+
+  for(let r of [firstHotelRoom1, firstHotelRoom2, secondHotelRoom1, secondHotelRoom2]) {
+    db.run(`INSERT INTO ${ROOM_TABLE}
+                    (${COLUMN_ROOM_HOTEL_ID},
+                      ${COLUMN_ROOM_PRICE},
+                      ${COLUMN_ROOM_AMENITIES},
+                      ${COLUMN_ROOM_CAPACITY},
+                      ${COLUMN_ROOM_MOUNTAIN_VIEW},
+                      ${COLUMN_ROOM_SEA_VIEW},
+                      ${COLUMN_ROOM_EXTENDABLE},
+                      ${COLUMN_ROOM_ISSUES})
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [r.getHotelId(), r.getPrice(), r.getAmenities(), r.getCapacity(), r.getMountainView(), r.getSeaView(), r.getExtendable(), r.getIssues()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting room:', err.message);
+                        } else {
+                            console.log('Room inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  for(let e of [firstHotelEmployee1, firstHotelEmployee2, secondHotelEmployee1, secondHotelEmployee2]) {
+    db.run(`INSERT INTO ${EMPLOYEE_TABLE}
+                    (${COLUMN_EMPLOYEE_HOTEL_ID},
+                      ${COLUMN_EMPLOYEE_FIRST_NAME},
+                      ${COLUMN_EMPLOYEE_LAST_NAME},
+                      ${COLUMN_EMPLOYEE_USERNAME},
+                      ${COLUMN_EMPLOYEE_PASSWORD},
+                      ${COLUMN_EMPLOYEE_ADDRESS_ID},
+                      ${COLUMN_EMPLOYEE_ROLE})
+                      VALUES (?, ?, ?, ?, ?, ?, ?)`, [e.getHotelId(), e.getFirstName(), e.getLastName(), e.getUserName(), e.getPassword(), e.getAddressId(), e.getRole()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting employee:', err.message);
+                        } else {
+                            console.log('Employee inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+  }
+
+  const phoneNumbers = chain.getPhoneNumbers();
+    //set phone numbers to be a string of the array
+  chain.setPhoneNumbers(phoneNumbers.join(', '));
+
+  db.run(`INSERT INTO ${CHAIN_TABLE}
+                    (${COLUMN_CHAIN_ADDRESS_ID},
+                      ${COLUMN_CHAIN_NAME},
+                      ${COLUMN_CHAIN_NUM_LOCATIONS},
+                      ${COLUMN_CHAIN_EMAIL},
+                      ${COLUMN_CHAIN_PHONE_NUMBERS})
+                      VALUES (?, ?, ?, ?, ?)`, [chain.getAddressId(), chain.getName(), chain.getNumLocations(), chain.getEmail(), chain.getPhoneNumbers()], function(err) {
+                        if (err) {
+                            // Handle the error here
+                            console.error('Error inserting chain:', err.message);
+                        } else {
+                            console.log('Chain inserted successfully');
+                            // Handle success here if needed
+                        }
+                    });
+
+  closeDatabase(db);                    
+}
+
+function deleteDummyChain() {
+  const dbPath = path.resolve(__dirname, 'database.db');
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error('Error connecting to SQLite database:', err.message);
+    } else {
+      console.log('Connected to SQLite database in initDB.js');
+    }
+  });
+
+  const chainAddress = new Address(83, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress1 = new Address(84, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const hotelAddress2 = new Address(85, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const employeeAddress1 = new Address(86, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress2 = new Address(87, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress3 = new Address(88, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+  const employeeAddress4 = new Address(89, "1234 Address", "123", "A1B 2C3", "ON", "Toronto");
+
+  const firstHotel = new Hotel(26, 6, 4, 2, 83, "fake@gmail.com", "1234567890");
+  const secondHotel = new Hotel(27, 6, 4, 2, 84, "fake@email.com", "0987654321");
+
+  const firstHotelRoom1 = new Room(126, 26, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const firstHotelRoom2 = new Room(127, 26, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const secondHotelRoom1 = new Room(128, 27, 100, "TV, Fridge, Microwave", 2, true, false, true, "None");
+  const secondHotelRoom2 = new Room(129, 27, 150, "TV, Fridge, Microwave", 5, true, false, true, "None");
+
+  const firstHotelEmployee1 = new Employee(26, 26, "John", "Doe", "johndoe", "password", 86, "Manager");
+  const firstHotelEmployee2 = new Employee(27, 26, "Jane", "Doe", "janedoe", "password", 87, "Receptionist");
+
+  const secondHotelEmployee1 = new Employee(28, 27, "John", "Smith", "johnsmith", "password", 88, "Manager");
+  const secondHotelEmployee2 = new Employee(29, 27, "Jane", "Smith", "janesmith", "password", 89, "Receptionist");
+
+  for(const a in [chainAddress, hotelAddress1, hotelAddress2, employeeAddress1, employeeAddress2, employeeAddress3, employeeAddress4]) {
+    db.run(`DELETE FROM ${ADDRESS_TABLE} WHERE ${COLUMN_ADDRESS_ID} = ?`, [a], function(err) {
+      if (err) {
+        console.error('Error deleting address:', err.message);
+      } else {
+        console.log('Address deleted successfully');
+      }
+    });
+  }
+
+  for(const h in [firstHotel, secondHotel]) {
+    db.run(`DELETE FROM ${HOTEL_TABLE} WHERE ${COLUMN_HOTEL_ID} = ?`, [h], function(err) {
+      if (err) {
+        console.error('Error deleting hotel:', err.message);
+      } else {
+        console.log('Hotel deleted successfully');
+      }
+    });
+  }
+
+  for(const r in [firstHotelRoom1, firstHotelRoom2, secondHotelRoom1, secondHotelRoom2]) {
+    db.run(`DELETE FROM ${ROOM_TABLE} WHERE ${COLUMN_ROOM_ID} = ?`, [r], function(err) {
+      if (err) {
+        console.error('Error deleting room:', err.message);
+      } else {
+        console.log('Room deleted successfully');
+      }
+    });
+  }
+
+  for(const e in [firstHotelEmployee1, firstHotelEmployee2, secondHotelEmployee1, secondHotelEmployee2]) {
+    db.run(`DELETE FROM ${EMPLOYEE_TABLE} WHERE ${COLUMN_EMPLOYEE_ID} = ?`, [e], function(err) {
+      if (err) {
+        console.error('Error deleting employee:', err.message);
+      } else {
+        console.log('Employee deleted successfully');
+      }
+    });
+  }
+
+  closeDatabase(db);
+
+}
+
 function closeDatabase(db) {
   db.close((err) => {
     if (err) {
@@ -629,9 +1055,22 @@ function closeDatabase(db) {
   });
 }
 
+function createEntireDatabase() {
+  //createDatabase();
+  //populateDatabase();
+  //createAdmin();
+  //populateRooms();
+  //createDummyChain();
+}
+
 module.exports = {
   createDatabase: createDatabase,
   populateDatabase: populateDatabase,
-  closeDatabase: closeDatabase
+  closeDatabase: closeDatabase, 
+  createAdmin: createAdmin,
+  populateRooms: populateRooms,
+  createDummyChain: createDummyChain,
+  deleteDummyChain: deleteDummyChain,
+  createEntireDatabase: createEntireDatabase
 };
 
