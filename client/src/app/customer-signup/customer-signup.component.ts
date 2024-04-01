@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ApiService } from '../api-service.service';
 import { forkJoin } from 'rxjs';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoggedInUserService } from '../logged-in-user.service';
@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 
 import Customer from '../../../../server/models/Customer';
 import Address from '../../../../server/models/Address';
+import { RoomData } from '../search-rooms/search-rooms.component';
 
 @Component({
   selector: 'app-customer-singup',
@@ -37,10 +38,13 @@ export class CustomerSignupComponent {
                 'Quebec', 
                 'Saskatchewan'];
 
+  roomData: RoomData[] = [];
+  employeeID: number = 0;
 
 
 
-  constructor(private loggedInUserService: LoggedInUserService, private router: Router, private fb: FormBuilder, apiService: ApiService) {
+
+  constructor(private route: ActivatedRoute, private loggedInUserService: LoggedInUserService, private router: Router, private fb: FormBuilder, apiService: ApiService) {
     this.apiService = apiService;
     this.signupForm = this.fb.group({
       identification: [''],
@@ -67,6 +71,11 @@ export class CustomerSignupComponent {
 
   ngOnInit() {
     console.log('Customer SignUp Component Initialized');
+
+    this.route.queryParams.subscribe(params => {
+      this.roomData = JSON.parse(params['room']);
+      this.employeeID = JSON.parse(params['id']);
+    });
 
     forkJoin({
       customers: this.apiService.getCustomers()
@@ -244,7 +253,12 @@ export class CustomerSignupComponent {
         console.log("Customer: " + customer);
       });
 
-      this.loggedInUserService.setLoggedInCustomer(this.customer);
+      if(this.employeeID === 0) {
+        this.loggedInUserService.setLoggedInCustomer(this.customer);
+        this.router.navigate(['/customer-landing']);
+      } else {
+        this.router.navigate(['/create-booking'], { queryParams: { room: JSON.stringify(this.roomData), id: JSON.stringify(this.employeeID), name : JSON.stringify(fname + ' ' + lname) } });
+      }
     }
     
   }

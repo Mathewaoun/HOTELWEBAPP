@@ -89,6 +89,7 @@ export class SearchRoomsComponent {
   allRoomData: RoomData[] = [];
   availableRoomData: RoomData[] = [];
   employeeID: number = 0;
+  employeeHotel!: Hotel;
 
   checkInDate: string = '';
   checkOutDate: string = '';
@@ -120,7 +121,8 @@ export class SearchRoomsComponent {
       hotels: this.apiService.getHotels(),
       addresses: this.apiService.getAddresses(),
       rooms: this.apiService.getRooms(),
-      bookings : this.apiService.getBookings()
+      bookings : this.apiService.getBookings(),
+      employees: this.apiService.getEmployees()
 
     }).subscribe(({ chains, hotels, addresses, rooms, bookings }) => {
       this.chains = chains;
@@ -195,35 +197,47 @@ export class SearchRoomsComponent {
 
     //getting all hotels in the city with the desired rating
 
-    if(location !== 'any') {
-      for(const h of this.hotels) {
-        let address: Address;
-        address = this.addresses.find(address => address.id === h.addressID) as Address;
-        if(address.city === location && h.rating >= rating) {
-          hotelOptions.push(h);
+    if(this.employeeID === 0) { 
+      if(location !== 'any') {
+        for(const h of this.hotels) {
+          let address: Address;
+          address = this.addresses.find(address => address.id === h.addressID) as Address;
+          if(address.city === location && h.rating >= rating) {
+            hotelOptions.push(h);
+          }
+        }
+      } else {
+        hotelOptions = this.hotels.filter(hotel => hotel.rating >= rating);
+      }
+  
+      //filtering hotels by chain
+      if (hotelChain !== 'any') {
+        let chain = this.chains.find(chain => chain.name === hotelChain);
+        if (chain) {
+          let chainID = chain.id;
+          hotelOptions = hotelOptions.filter(hotel => hotel.chainID === chainID);
+        }
+      }
+  
+      //getting all room within the hotel options
+      for(const h of hotelOptions) {
+        for(const r of this.rooms) {
+          if(r.hotelId === h.id && r.capacity >= roomCapacity) {
+            roomOptions.push(r);
+          }
         }
       }
     } else {
-      hotelOptions = this.hotels.filter(hotel => hotel.rating >= rating);
-    }
+      this.employeeHotel = this.hotels.find(hotel => hotel.id === this.employeeID) as Hotel;
 
-    //filtering hotels by chain
-    if (hotelChain !== 'any') {
-      let chain = this.chains.find(chain => chain.name === hotelChain);
-      if (chain) {
-        let chainID = chain.id;
-        hotelOptions = hotelOptions.filter(hotel => hotel.chainID === chainID);
-      }
-    }
-
-    //getting all room within the hotel options
-    for(const h of hotelOptions) {
       for(const r of this.rooms) {
-        if(r.hotelId === h.id && r.capacity >= roomCapacity) {
+        if(r.hotelId === this.employeeHotel.id && r.capacity >= roomCapacity) {
           roomOptions.push(r);
         }
       }
     }
+
+    
 
     //getting all bookings within the date range
     let bookings: Booking[] = [];

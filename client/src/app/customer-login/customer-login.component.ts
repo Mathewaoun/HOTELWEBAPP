@@ -93,7 +93,7 @@ export class CustomerLoginComponent implements OnInit, OnDestroy{
   }
 
   goToCustomerSignup(): void {
-    this.router.navigate(['/customer-signup']); 
+    this.router.navigate(['/customer-signup'], {queryParams: { room: JSON.stringify(this.roomData), id: JSON.stringify(this.employeeID) }}); 
   }
 
   ngOnDestroy() {
